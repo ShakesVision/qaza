@@ -1,20 +1,103 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Blank
+      Baitul Maarif Notification Manager
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-segment color="primary" [(ngModel)]="type" (ionChange)="segmentChanged($event)">
+    <ion-segment-button value="default" checked>
+      <ion-label>Default</ion-label>
+      <ion-icon name="color-wand"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="new">
+      <ion-label>New</ion-label>
+      <ion-icon name="flame"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="timer">
+      <ion-label>Timer</ion-label>
+      <ion-icon name="stopwatch"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div [ngSwitch]="type">
+    <div *ngSwitchCase="'default'">
+      <ion-card style="direction: rtl;">       
+        <ion-card-header>
+          <ion-card-title> اس وقت بیان براہِ راست نشر ہو رہا ہے
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          واعظ: ترجمانِ حکیم الامت حضرت مفتی محمد ارشد صاحب بجھیڑی دامت برکاتہم
+        </ion-card-content>
+      </ion-card>
+
+      <ion-button (click)="defaultNotif('Test')" expand="full">Send to Test Devices</ion-button>
+      <ion-button color="danger" (click)="presentAlertConfirm('default')" expand="full">Send to All</ion-button>
+    </div>
+
+    <div *ngSwitchCase="'new'">
+      <ion-item>
+        <ion-label>Heading*</ion-label>
+        <ion-input [(ngModel)]="title"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Message*</ion-label>
+        <ion-input [(ngModel)]="message"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Large Icon</ion-label>
+        <ion-input placeholder="Enter image URL..." [(ngModel)]="bigIcon"></ion-input>
+      </ion-item>
+      <div *ngIf="bigIcon" class="ion-text-center">        
+        <img [src]="bigIcon" width="50px" height="50px" alt="Large Icon">
+      </div>
+      <ion-item>
+        <ion-label>Big Picture</ion-label>
+        <ion-input placeholder="Enter image URL..." [(ngModel)]="bigPic"></ion-input>
+      </ion-item>
+      
+      <br>
+      <h3 class="ion-padding">NOTIFICATION PREVIEW:</h3>
+      <ion-card style="direction: rtl;" >        
+          <ion-grid>
+          <ion-row>
+          <ion-col *ngIf="bigIcon" size="3">
+          <img [src]="bigIcon" width="50px" height="50px" alt="Default Logo">
+          </ion-col>
+          <ion-col>
+          <b> {{title}} </b>
+          <p> {{message}} </p>        
+          </ion-col>
+          </ion-row>
+          </ion-grid>
+          <div *ngIf="bigPic" class="ion-text-center">        
+            <img [src]="bigPic" alt="Big picture">
+          </div>
+      </ion-card>
+
+      <ion-textarea placeholder="Enter extra text..." [(ngModel)]="extra"></ion-textarea>
+
+      <ion-button (click)="newNotif('Test',title,message,bigIcon,bigPic,extra)" expand="full">Send to Test Devices
+      </ion-button>
+      <ion-button color="danger" (click)="presentAlertConfirm('new')" expand="full">Send to All
+      </ion-button>
+    </div>
+
+    <div *ngSwitchCase="'timer'">
+      <ion-input [(ngModel)]='password'></ion-input>
+      <ion-button color="danger" (click)="timerAlertConfirm()" expand="full">Set Timer to Zero
+      </ion-button>      
+    </div>
+
   </div>
+  <div class="ion-text-center">
+    <ion-spinner *ngIf="spin"></ion-spinner>
+    <div class="status ion-padding">
+      <p>{{status}}</p>
+    </div>
+  </div>
+
 </ion-content>

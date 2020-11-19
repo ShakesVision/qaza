@@ -1,5 +1,7 @@
 {
   "name": "bm-admin-panel",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
