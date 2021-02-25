@@ -25,3 +25,13 @@
 #container a {
   text-decoration: none;
 }
+.codenbtn {
+  display:flex;
+  align-items:center;  
+}
+ion-card.card-items {position:relative;}
+.codenbtn ion-button {
+  position:absolute;
+  bottom:0;
+  right:0;
+}
