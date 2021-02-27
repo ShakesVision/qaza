@@ -31,12 +31,15 @@
 }
 ion-card.card-items {position:relative;}
 .codenbtn ion-button {
-  position:absolute;
+  /* position:absolute;
   bottom:0;
-  right:0;
+  right:0; */
 }
 .hangingBtns {
   position:absolute;
   top:-80px;
   right:0;
+  ion-button {
+    font-size: x-small;
+  }
 }

@@ -14,16 +14,27 @@
     </ion-segment-button>
     <ion-segment-button value="new">
       <ion-label>Send New</ion-label>
-      <ion-icon name="flame"></ion-icon>
+      <ion-icon name="notifications"></ion-icon>
     </ion-segment-button>
   </ion-segment>
 
   <div [ngSwitch]="type">
     <div *ngSwitchCase="'default'">
-      <ion-button (click)="getAll()">Reload</ion-button>      
-      <ion-input placeholder="Name" [(ngModel)]="name_input"></ion-input>
-      <ion-input placeholder="Code" [(ngModel)]="code_input"></ion-input>
-      <ion-button (click)="saveItem()">Add New</ion-button>
+      <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
+          refreshingSpinner="circles" refreshingText="Refreshing...">
+        </ion-refresher-content>
+      </ion-refresher>
+      <ion-item>
+        <ion-label position="floating">App Name</ion-label>
+        <ion-input [(ngModel)]="name_input"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">App Key</ion-label>
+        <ion-input [(ngModel)]="code_input"></ion-input>
+      </ion-item>
+      
+      <ion-button (click)="saveItem()"> <ion-icon slot="start" name="add"></ion-icon> Add New</ion-button>
       <!-- Implement Delete & Update (How? Splice & a[2]=value)-->
       <!-- Refresh list, Add UserAuthKey field, A notepad, A searchbar -->
       <!-- <ion-searchbar class="ion-text-center"  placeholder="Search..." showcancelbutton="" (input)="filterList($event)" *ngIf="items.length>0"></ion-searchbar>       -->
@@ -36,19 +47,19 @@
         <ion-card-content>
           <div class="hangingBtns">
             <ion-button color="danger" (click)="delete(i)">
-              <ion-icon name="dustbin" slot="icon-only"></ion-icon>
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button (click)="update(app.name,app.code)">
-              <ion-icon name="pencil" slot="icon-only"></ion-icon>
+              <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button color="success" (click)="saveItem(i)">
-              <ion-icon name="pencil" slot="icon-only"></ion-icon>
+              <ion-icon name="checkmark-done-outline" slot="icon-only"></ion-icon>
             </ion-button>
           </div>
           <div class='codenbtn'>
             <!-- d966d91c-664e-47e8-ba65-314d82fe1196 -->
             <span class='code'> {{app.code}} </span>
-            <ion-button fill='none'>
+            <ion-button fill='none' (click)="copy(app.code)">
               <ion-icon slot='icon-only' name='copy-outline'></ion-icon>
             </ion-button>
           </div>

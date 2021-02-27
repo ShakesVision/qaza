@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AlertController, IonContent, Platform } from '@ionic/angular';
-import { Observable } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 
 
@@ -16,7 +16,8 @@ export class HomePage {
     public httpClient: HttpClient,
     public plt: Platform,
     public alertController: AlertController,
-    private storage: Storage
+    private storage: Storage,
+    public toastController: ToastController
   ) { }
 
   type: string = 'default';
@@ -141,6 +142,28 @@ export class HomePage {
   }
   ScrollToTop() {
     this.content.scrollToTop(1000);
+  }
+  doRefresh(event) {
+    setTimeout(() => {      
+      this.getAll();
+      console.log('Refreshed.');
+      event.target.complete();
+    }, 1000);
+  }
+  copy(text) {
+    let e = document.createElement("textarea");
+    e.value = text;
+    document.body.appendChild(e);
+    e.select();
+    document.execCommand("Copy");
+    document.body.removeChild(e);
+  }
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Copied!',
+      duration: 1500
+    });
+    toast.present();
   }
   filterList(evt) {
     let temp = this.items;
