@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AlertController, Platform } from '@ionic/angular';
+import { AlertController, IonContent, Platform } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { Storage } from '@ionic/storage';
 
@@ -11,7 +11,7 @@ import { Storage } from '@ionic/storage';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-
+  @ViewChild(IonContent, { static: false }) content: IonContent;
   constructor(
     public httpClient: HttpClient,
     public plt: Platform,
@@ -39,9 +39,8 @@ export class HomePage {
   authKey: string;
   customSegment: string;
 
-  id_input:string;
-  name_input:string;
-  code_input:string;
+  name_input: string;
+  code_input: string;
 
   ngOnInit() {
     this.getAll();
@@ -108,25 +107,51 @@ export class HomePage {
   }
 
   setAll(val) {
-    this.storage.set('entries',val);
+    return this.storage.set('entries', val);
   }
   getAll() {
     this.storage.get('entries').then((entries) => {
-      if(entries){
-        this.items = entries; 
+      if (entries) {
+        this.items = entries;
       }
     });
   }
-  saveItem(){
+  saveItem(index?) {
+    console.log(index + "<= index value in save Fn")
     let item = {
-      id: this.id_input,
       name: this.name_input,
       code: this.code_input
     };
-    this.items.push(item);
-    this.setAll(this.items);
-    this.getAll();
+    if (index != undefined) {
+      this.items[index] = item;
+      console.log("Updated.")
+    }
+    else this.items.push(item);
+    this.setAll(this.items).then(_ => this.getAll());
   }
   //Delete and update
+  update(name, code) {
+    this.name_input = name;
+    this.code_input = code;
+    this.ScrollToTop();
+  }
+  delete(index: number) {
+    this.items.splice(index, 1);
+    this.setAll(this.items).then(_ => this.getAll());
+  }
+  ScrollToTop() {
+    this.content.scrollToTop(1000);
+  }
+  filterList(evt) {
+    let temp = this.items;
+    const searchTerm = evt.srcElement.value;
+    this.items = this.items.filter(val => {
+      if (val.name && searchTerm) {
+        if (val.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1) {
+          return true;
+        }
+      }
+    });
+  }
 
 }
