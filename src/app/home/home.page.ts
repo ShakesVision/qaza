@@ -144,7 +144,7 @@ export class HomePage {
     this.content.scrollToTop(1000);
   }
   doRefresh(event) {
-    setTimeout(() => {      
+    setTimeout(() => {
       this.getAll();
       console.log('Refreshed.');
       event.target.complete();

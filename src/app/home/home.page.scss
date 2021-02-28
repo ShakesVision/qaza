@@ -43,3 +43,10 @@ ion-card.card-items {position:relative;}
     font-size: x-small;
   }
 }
+.inputElements {
+  margin: 5px 20px;
+  ion-item {    
+    border: 1px solid rgba(23,223,90,0.4);
+    border-radius: 10px;
+  }
+}

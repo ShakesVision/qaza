@@ -3,6 +3,11 @@
     <ion-title>
       OneSignal Push Manager
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button routerLink="/notepad">
+        <ion-icon name="receipt-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -10,7 +15,7 @@
   <ion-segment color="primary" [(ngModel)]="type" (ionChange)="segmentChanged($event)">
     <ion-segment-button value="default" checked>
       <ion-label>Apps</ion-label>
-      <ion-icon name="color-wand"></ion-icon>
+      <ion-icon name="grid"></ion-icon>
     </ion-segment-button>
     <ion-segment-button value="new">
       <ion-label>Send New</ion-label>
@@ -25,7 +30,9 @@
           refreshingSpinner="circles" refreshingText="Refreshing...">
         </ion-refresher-content>
       </ion-refresher>
-      <ion-item>
+
+      <div class="inputElements ion-text-center">
+        <ion-item>
         <ion-label position="floating">App Name</ion-label>
         <ion-input [(ngModel)]="name_input"></ion-input>
       </ion-item>
@@ -33,8 +40,9 @@
         <ion-label position="floating">App Key</ion-label>
         <ion-input [(ngModel)]="code_input"></ion-input>
       </ion-item>
-      
       <ion-button (click)="saveItem()"> <ion-icon slot="start" name="add"></ion-icon> Add New</ion-button>
+      </div>
+            
       <!-- Implement Delete & Update (How? Splice & a[2]=value)-->
       <!-- Refresh list, Add UserAuthKey field, A notepad, A searchbar -->
       <!-- <ion-searchbar class="ion-text-center"  placeholder="Search..." showcancelbutton="" (input)="filterList($event)" *ngIf="items.length>0"></ion-searchbar>       -->

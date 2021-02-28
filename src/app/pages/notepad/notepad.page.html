@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Notepad
+    </ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="confirmClear()" slot="end">
+        <ion-icon slot="icon-only" name="backspace"></ion-icon>
+      </ion-button>
+      <ion-button (click)="restore()" slot="end">
+        <ion-icon slot="icon-only" name="refresh"></ion-icon>
+      </ion-button>
+      <ion-button (click)="presentConfirm()" slot="end">
+        <ion-icon class="rotate-icon" slot="icon-only" name="save"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div style="height: 100%;">
+    <ion-textarea [(ngModel)]="textvalue" class="ion-no-padding" placeholder="Write, O friend..." autofocus="true" width="100%" rows="25">
+    </ion-textarea>
+  </div>
+</ion-content>
+<ion-footer class="ion-padding" style="border-top: 1px solid rgb(163, 161, 161); padding: 0 5px 0 5px;">
+  <small>Last Saved: <ion-label> {{timestamp}} </ion-label></small>
+</ion-footer>

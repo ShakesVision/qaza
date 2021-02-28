@@ -11,6 +11,10 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
+  {
+    path: 'notepad',
+    loadChildren: () => import('./pages/notepad/notepad.module').then( m => m.NotepadPageModule)
+  },
 ];
 
 @NgModule({
