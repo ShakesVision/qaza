@@ -76,7 +76,8 @@ export class HomePage {
         this.status = `Sent successfully!\nDelivered to: ${new_data.recipients.toString()}`;
       }, error => {
         console.log(error);
-        this.status = "Error: " + error;
+        this.status = `Error: ${error.message} \nFull Error:\n${JSON.stringify(error)}`;
+        this.spin = false;
       });
   }
 

@@ -5,7 +5,7 @@
     </ion-title>
     <ion-buttons slot="end">
       <ion-button routerLink="/notepad">
-        <ion-icon name="receipt-outline"></ion-icon>
+        <ion-icon name="receipt"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -37,7 +37,7 @@
         <ion-input [(ngModel)]="name_input"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">App Key</ion-label>
+        <ion-label position="floating">App ID</ion-label>
         <ion-input [(ngModel)]="code_input"></ion-input>
       </ion-item>
       <ion-button (click)="saveItem()"> <ion-icon slot="start" name="add"></ion-icon> Add New</ion-button>
@@ -46,6 +46,10 @@
       <!-- Implement Delete & Update (How? Splice & a[2]=value)-->
       <!-- Refresh list, Add UserAuthKey field, A notepad, A searchbar -->
       <!-- <ion-searchbar class="ion-text-center"  placeholder="Search..." showcancelbutton="" (input)="filterList($event)" *ngIf="items.length>0"></ion-searchbar>       -->
+
+      <div *ngIf="items.length===0" class="ion-text-center" style="margin-top: 35%;">
+        <ion-label color="medium"> <em>Nothing here :(</em> </ion-label>
+      </div>
 
       <ion-card class='card-items' *ngFor="let app of items;let i= index;">
         <ion-card-header>
@@ -58,7 +62,7 @@
               <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button (click)="update(app.name,app.code)">
-              <ion-icon name="pencil-outline" slot="icon-only"></ion-icon>
+              <ion-icon name="pencil" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button color="success" (click)="saveItem(i)">
               <ion-icon name="checkmark-done-outline" slot="icon-only"></ion-icon>
@@ -78,18 +82,18 @@
 
     <div *ngSwitchCase="'new'">
       <div class="IDs">
-        <ion-icon name="key-outline" slot="start"></ion-icon>
-        <ion-input [(ngModel)]="authKey"></ion-input>
-        <ion-icon name="locate-outline" slot="start"></ion-icon>
-        <ion-input [(ngModel)]="appId"></ion-input>
+        <ion-item><ion-icon name="key-outline" slot="start" class="ion-align-self-start"></ion-icon>
+          <ion-input placeholder="User Auth Key" [(ngModel)]="authKey" required></ion-input></ion-item>        
+        <ion-item><ion-icon name="locate-outline" slot="start" class="ion-align-self-start"></ion-icon>
+          <ion-input placeholder="App ID" [(ngModel)]="appId" required></ion-input></ion-item>
       </div>
       <ion-item>
         <ion-label>Heading*</ion-label>
-        <ion-input [(ngModel)]="title"></ion-input>
+        <ion-input required [(ngModel)]="title"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Message*</ion-label>
-        <ion-input [(ngModel)]="message"></ion-input>
+        <ion-input required [(ngModel)]="message"></ion-input>
       </ion-item>
       <ion-item>
         <ion-label>Large Icon</ion-label>
@@ -102,10 +106,11 @@
         <ion-label>Big Picture</ion-label>
         <ion-input placeholder="Enter image URL..." [(ngModel)]="bigPic"></ion-input>
       </ion-item>
+      <ion-textarea rows="3" placeholder="Enter extra text..." [(ngModel)]="extra"></ion-textarea>
 
       <br>
-      <h3 class="ion-padding">NOTIFICATION PREVIEW:</h3>
-      <ion-card style="direction: rtl;">
+      <h4 class="ion-padding">NOTIFICATION PREVIEW:</h4>
+      <ion-card>
         <ion-grid>
           <ion-row>
             <ion-col *ngIf="bigIcon" size="3">
@@ -121,8 +126,6 @@
           <img [src]="bigPic" alt="Big picture">
         </div>
       </ion-card>
-
-      <ion-textarea placeholder="Enter extra text..." [(ngModel)]="extra"></ion-textarea>
 
       <ion-button (click)="newNotif('Test',title,message,bigIcon,bigPic,extra)" expand="full">Send to Test Devices
       </ion-button>

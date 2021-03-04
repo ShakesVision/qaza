@@ -30,10 +30,8 @@
   align-items:center;  
 }
 ion-card.card-items {position:relative;}
-.codenbtn ion-button {
-  /* position:absolute;
-  bottom:0;
-  right:0; */
+.codenbtn ion-button:hover {
+  color: var(--ion-color-success);  
 }
 .hangingBtns {
   position:absolute;
@@ -43,10 +41,8 @@ ion-card.card-items {position:relative;}
     font-size: x-small;
   }
 }
-.inputElements {
-  margin: 5px 20px;
-  ion-item {    
+.inputElements ion-item, .IDs ion-item {    
+    margin: 5px 20px;
     border: 1px solid rgba(23,223,90,0.4);
-    border-radius: 10px;
-  }
+    border-radius: 10px;  
 }
