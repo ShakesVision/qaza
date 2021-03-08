@@ -1,12 +1,19 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      OneSignal Push Manager
+      Push Manager
     </ion-title>
     <ion-buttons slot="end">
+      <div class="topBtns">
       <ion-button routerLink="/notepad">
-        <ion-icon name="receipt"></ion-icon>
+        <ion-icon name="receipt"></ion-icon>        
       </ion-button>
+      <ion-label>Notepad</ion-label></div>
+      <div class="topBtns">
+      <ion-button routerLink="/about">
+        <ion-icon name="information-circle"></ion-icon>        
+      </ion-button>
+      <ion-label>About</ion-label></div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -33,16 +40,18 @@
 
       <div class="inputElements ion-text-center">
         <ion-item>
-        <ion-label position="floating">App Name</ion-label>
-        <ion-input [(ngModel)]="name_input"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">App ID</ion-label>
-        <ion-input [(ngModel)]="code_input"></ion-input>
-      </ion-item>
-      <ion-button (click)="saveItem()"> <ion-icon slot="start" name="add"></ion-icon> Add New</ion-button>
+          <ion-label position="floating">App Name</ion-label>
+          <ion-input clearInput required [(ngModel)]="name_input"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">App ID</ion-label>
+          <ion-input clearInput required [(ngModel)]="code_input"></ion-input>
+        </ion-item>
+        <ion-button (click)="saveItem()" [disabled]="name_input=='' || code_input==''">
+          <ion-icon slot="start" name="add"></ion-icon> Add New
+        </ion-button>
       </div>
-            
+
       <!-- Implement Delete & Update (How? Splice & a[2]=value)-->
       <!-- Refresh list, Add UserAuthKey field, A notepad, A searchbar -->
       <!-- <ion-searchbar class="ion-text-center"  placeholder="Search..." showcancelbutton="" (input)="filterList($event)" *ngIf="items.length>0"></ion-searchbar>       -->
@@ -58,7 +67,7 @@
         </ion-card-header>
         <ion-card-content>
           <div class="hangingBtns">
-            <ion-button color="danger" (click)="delete(i)">
+            <ion-button color="danger" (click)="deleteConfirm(i,app.name)">
               <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button (click)="update(app.name,app.code)">
@@ -82,34 +91,46 @@
 
     <div *ngSwitchCase="'new'">
       <div class="IDs">
-        <ion-item><ion-icon name="key-outline" slot="start" class="ion-align-self-start"></ion-icon>
-          <ion-input placeholder="User Auth Key" [(ngModel)]="authKey" required></ion-input></ion-item>        
-        <ion-item><ion-icon name="locate-outline" slot="start" class="ion-align-self-start"></ion-icon>
-          <ion-input placeholder="App ID" [(ngModel)]="appId" required></ion-input></ion-item>
+        <div class="auth-wrapper">
+          <!-- <ion-button color="success" class="save-auth" fill="clear" (click)="showRewardAlert()">
+            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
+          </ion-button> -->
+          <ion-item>
+            <ion-icon name="key-outline" slot="start" class="ion-align-self-start"></ion-icon>
+            <ion-input placeholder="User Auth Key" [(ngModel)]="authKey" required ionFocus="onAuthFocus($event)">
+            </ion-input>
+            <ion-icon size="small" color="success" name="save-outline" slot="end" (click)="showRewardAlert()"></ion-icon>
+          </ion-item>          
+        </div>
+        <ion-item>
+          <ion-icon name="locate-outline" slot="start" class="ion-align-self-start"></ion-icon>
+          <ion-input placeholder="App ID" [(ngModel)]="appId" required></ion-input>
+        </ion-item>
       </div>
       <ion-item>
-        <ion-label>Heading*</ion-label>
-        <ion-input required [(ngModel)]="title"></ion-input>
+        <ion-label>Heading:*</ion-label>
+        <ion-input required [(ngModel)]="title" placeholder="An eye catching title..."></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Message*</ion-label>
-        <ion-input required [(ngModel)]="message"></ion-input>
+        <ion-label>Message:*</ion-label>
+        <ion-input required [(ngModel)]="message" placeholder="Your descriptive text here..."></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label>Large Icon</ion-label>
+        <ion-label>Large Icon:</ion-label>
         <ion-input placeholder="Enter image URL..." [(ngModel)]="bigIcon"></ion-input>
       </ion-item>
       <div *ngIf="bigIcon" class="ion-text-center">
         <img [src]="bigIcon" width="50px" height="50px" alt="Large Icon">
       </div>
       <ion-item>
-        <ion-label>Big Picture</ion-label>
+        <ion-label>Big Picture:</ion-label>
         <ion-input placeholder="Enter image URL..." [(ngModel)]="bigPic"></ion-input>
       </ion-item>
-      <ion-textarea rows="3" placeholder="Enter extra text..." [(ngModel)]="extra"></ion-textarea>
+      <ion-textarea id="txtarea" style="margin: 10px;" rows="3" placeholder="Enter extra text... (Handle in your app using data.notification.payload.additionalData.extra)"
+       [(ngModel)]="extra"></ion-textarea>
 
       <br>
-      <h4 class="ion-padding">NOTIFICATION PREVIEW:</h4>
+      <h4 class="ion-padding">NOTIFICATION PREVIEW</h4>
       <ion-card>
         <ion-grid>
           <ion-row>
@@ -134,14 +155,14 @@
       <ion-input placeholder="Custom Segment Name..." [(ngModel)]="customSegment"></ion-input>
       <ion-button color="success" (click)="presentAlertConfirm(customSegment)" expand="full">Send in: {{customSegment}}
       </ion-button>
+      <div class="ion-text-center">
+        <ion-spinner *ngIf="spin"></ion-spinner>
+        <div class="status ion-padding">
+          <p>{{status}}</p>
+        </div>
+      </div>
     </div>
 
-  </div>
-  <div class="ion-text-center">
-    <ion-spinner *ngIf="spin"></ion-spinner>
-    <div class="status ion-padding">
-      <p>{{status}}</p>
-    </div>
   </div>
 
 </ion-content>

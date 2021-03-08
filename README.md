@@ -2,7 +2,7 @@
 This helps you manage your app credentials and provides intuitive UI for sending the notifications to your users.
 
 - Manage all your apps
-- Stores all your credentials
+- Stores all your credentials *in your phone*
 - Offline storage, Open-source and hence trustworthy
 - CRUD for app info with lovely UI
 - Simple notepad to save other necessary stuff
@@ -12,4 +12,5 @@ This helps you manage your app credentials and provides intuitive UI for sending
 Questions, suggessions and contributions are welcome.
 
 **Shakeeb Ahmad**
+
 *www.shakeeb.in*

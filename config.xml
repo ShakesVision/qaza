@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sarbakaf.bmnotifmanager" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>BM Notif Manager</name>
-    <description>Notification Manager for Baitul Ma'arif app.</description>
+<widget id="com.sarbakaf.onesignalpush" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>OneSignal Push</name>
+    <description>Push Manager for OneSignal.</description>
     <author email="shakes.ahmad@gmail.com" href="http://shakeeb.in/">Sarbakaf Group</author>
     <content src="index.html" />
     <access origin="*" />

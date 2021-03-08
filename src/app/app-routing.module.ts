@@ -15,6 +15,10 @@ const routes: Routes = [
     path: 'notepad',
     loadChildren: () => import('./pages/notepad/notepad.module').then( m => m.NotepadPageModule)
   },
+  {
+    path: 'about',
+    loadChildren: () => import('./pages/about/about.module').then( m => m.AboutPageModule)
+  },
 ];
 
 @NgModule({
