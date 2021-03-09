@@ -48,6 +48,7 @@ export class HomePage {
     document.addEventListener(this.admobFree.events.REWARD_VIDEO_REWARD, (result) => {
       this.storage.set('authKey', this.authKey)
     });
+    
   }
   
   newNotif(seg: string, heading: string, msg: string, bigIcon: string = "", bigPic: string = "", data = {}) {
