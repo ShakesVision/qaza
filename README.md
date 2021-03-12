@@ -1,7 +1,7 @@
 ## OneSignal Push Manager
 https://play.google.com/store/apps/details?id=com.sarbakaf.onesignalpush
 
-This helps you manage your app credentials and provides intuitive UI for sending the notifications to your users.
+This app helps you manage your app credentials and provides intuitive UI for sending the notifications to your users.
 
 - Manage all your apps
 - Stores all your credentials *in your phone*
