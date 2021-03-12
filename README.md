@@ -1,4 +1,6 @@
 ## OneSignal Push Manager
+https://play.google.com/store/apps/details?id=com.sarbakaf.onesignalpush
+
 This helps you manage your app credentials and provides intuitive UI for sending the notifications to your users.
 
 - Manage all your apps
@@ -14,3 +16,6 @@ Questions, suggessions and contributions are welcome.
 **Shakeeb Ahmad**
 
 *www.shakeeb.in*
+
+<h3 align="left">Support:</h3>
+<p><a href="https://www.buymeacoffee.com/shakesvision"> <img align="left" src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" height="50" width="210" alt="shakesvision" /></a></p>
