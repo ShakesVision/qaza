@@ -80,35 +80,44 @@
         </form>
       </div>
       <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
-      <ion-card class="card-items" *ngFor="let app of items;let i= index;">
-        <ion-card-header>
-          <ion-card-subtitle>#{{i+1}}</ion-card-subtitle>
-          <ion-card-title>{{app.name}}</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="hangingBtns">
-            <ion-button color="danger" (click)="deleteConfirm(i,app.name)">
-              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-            <ion-button (click)="update(app.name,app.code)">
-              <ion-icon name="pencil" slot="icon-only"></ion-icon>
-            </ion-button>
-            <ion-button color="success" (click)="saveItem(i)">
-              <ion-icon
-                name="checkmark-done-outline"
-                slot="icon-only"
-              ></ion-icon>
-            </ion-button>
-          </div>
-          <div class="codenbtn">
-            <!-- d966d91c-664e-47e8-ba65-314d82fe1196 -->
-            <span class="code"> {{app.code}} </span>
-            <ion-button fill="none" (click)="copy(app.code)">
-              <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
-            </ion-button>
-          </div>
-        </ion-card-content>
-      </ion-card>
+      <div class="card-wrapper" *ngFor="let app of items;let i= index;">
+        <ion-card class="card-items" *ngIf="app">
+          <ion-card-header>
+            <ion-card-subtitle>{{app[0].date| date}}</ion-card-subtitle>
+            <ion-card-title>{{app.salah}}</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item *ngFor="let r of app">
+              {{r.salah}} : {{r.count}}
+              <ion-icon slot="end" name="time-outline"></ion-icon>
+              <ion-label slot="end" color="medium">
+                {{r.date | date}}
+              </ion-label>
+            </ion-item>
+            <div class="hangingBtns">
+              <ion-button color="danger" (click)="deleteConfirm(i,app.name)">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button (click)="update(app.salah,app.count)">
+                <ion-icon name="pencil" slot="icon-only"></ion-icon>
+              </ion-button>
+              <ion-button color="success" (click)="saveItem(i)">
+                <ion-icon
+                  name="checkmark-done-outline"
+                  slot="icon-only"
+                ></ion-icon>
+              </ion-button>
+            </div>
+            <div class="codenbtn">
+              <!-- d966d91c-664e-47e8-ba65-314d82fe1196 -->
+              <span class="code"> {{app.code}} </span>
+              <ion-button fill="none" (click)="copy(app.code)">
+                <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </div>
     </div>
 
     <div *ngSwitchCase="'new'">

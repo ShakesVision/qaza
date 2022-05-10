@@ -77,6 +77,7 @@ export class HomePage {
       this.showBanner();
     });
     this.getAll();
+    this.getlast10logs();
     document.addEventListener(
       this.admobFree.events.REWARD_VIDEO_REWARD,
       (result) => {
@@ -146,13 +147,15 @@ export class HomePage {
       console.log(old);
       if (old) {
         old.push(data);
-        return this.storage
-          .set(id, old)
-          .then((_) => console.log("log updated successfully", _));
+        return this.storage.set(id, old).then((_) => {
+          console.log("log updated successfully", _);
+          this.getlast10logs();
+        });
       } else {
-        return this.storage
-          .set(id, [data])
-          .then((_) => console.log("log set successfully", _));
+        return this.storage.set(id, [data]).then((_) => {
+          console.log("log set successfully", _);
+          this.getlast10logs();
+        });
       }
     });
     // data.timestamp = new Date();
@@ -252,7 +255,7 @@ export class HomePage {
       console.log(entries);
       if (entries) {
         this.masterDataPresent = true;
-        this.items = entries;
+        // this.items = entries;
         this.masterData = entries;
         this.populateMasterForm();
         this.loadSimplePieChart();
@@ -467,5 +470,18 @@ export class HomePage {
       // date.getMilliseconds(),
     ];
     return components.join("-");
+  }
+  last10dates = [...Array(10)].map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    return this.getUniqueId(d);
+  });
+  getlast10logs() {
+    this.last10dates.forEach((d) => {
+      this.storage.get("log" + d).then((r) => {
+        console.log(r, "log" + d);
+        this.items.push(r);
+      });
+    });
   }
 }
