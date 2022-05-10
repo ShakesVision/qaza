@@ -63,7 +63,7 @@ ion-card.card-items {
   z-index: 2;
 }
 .topBtns {
-  display:flex;
+  display: flex;
   flex-direction: column;
   align-items: center;
   text-transform: uppercase;
@@ -72,4 +72,17 @@ ion-card.card-items {
 }
 .topBtns ion-label {
   letter-spacing: 1px;
+}
+.chart-wrapper {
+  // overflow-x: scroll;
+}
+ion-grid ion-col {
+  text-align: center;
+  .stats-wrap {
+    font-size: x-small;
+  }
+  .col-label-remaining {
+    font-size: x-large;
+    color: var(--ion-color-primary);
+  }
 }

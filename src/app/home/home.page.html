@@ -1,66 +1,80 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>
-      Push Manager
-    </ion-title>
+    <ion-title> Qaza Tracker </ion-title>
     <ion-buttons slot="end">
       <div class="topBtns">
-      <ion-button routerLink="/notepad">
-        <ion-icon name="receipt"></ion-icon>        
-      </ion-button>
-      <ion-label>Notepad</ion-label></div>
+        <ion-button routerLink="/notepad">
+          <ion-icon name="receipt"></ion-icon>
+        </ion-button>
+        <ion-label>Notepad</ion-label>
+      </div>
       <div class="topBtns">
-      <ion-button routerLink="/about">
-        <ion-icon name="information-circle"></ion-icon>        
-      </ion-button>
-      <ion-label>About</ion-label></div>
+        <ion-button routerLink="/about">
+          <ion-icon name="information-circle"></ion-icon>
+        </ion-button>
+        <ion-label>About</ion-label>
+      </div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-segment color="primary" [(ngModel)]="type" (ionChange)="segmentChanged($event)">
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-segment
+    color="primary"
+    [(ngModel)]="type"
+    (ionChange)="segmentChanged($event)"
+  >
     <ion-segment-button value="default" checked>
-      <ion-label>Apps</ion-label>
-      <ion-icon name="grid"></ion-icon>
+      <ion-label>Add</ion-label>
+      <ion-icon name="add"></ion-icon>
     </ion-segment-button>
     <ion-segment-button value="new">
-      <ion-label>Send New</ion-label>
-      <ion-icon name="notifications"></ion-icon>
+      <ion-label>Track</ion-label>
+      <ion-icon name="pie-chart"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="master">
+      <ion-label>Master</ion-label>
+      <ion-icon name="grid"></ion-icon>
     </ion-segment-button>
   </ion-segment>
 
   <div [ngSwitch]="type">
     <div *ngSwitchCase="'default'">
       <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-        <ion-refresher-content pullingIcon="chevron-down-circle-outline" pullingText="Pull to refresh"
-          refreshingSpinner="circles" refreshingText="Refreshing...">
+        <ion-refresher-content
+          pullingIcon="chevron-down-circle-outline"
+          pullingText="Pull to refresh"
+          refreshingSpinner="circles"
+          refreshingText="Refreshing..."
+        >
         </ion-refresher-content>
       </ion-refresher>
 
       <div class="inputElements ion-text-center">
-        <ion-item>
-          <ion-label position="floating">App Name</ion-label>
-          <ion-input clearInput required [(ngModel)]="name_input"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">App ID</ion-label>
-          <ion-input clearInput required [(ngModel)]="code_input"></ion-input>
-        </ion-item>
-        <ion-button (click)="saveItem()" [disabled]="name_input=='' || code_input==''">
-          <ion-icon slot="start" name="add"></ion-icon> Add New
-        </ion-button>
+        <form [formGroup]="qazaForm" action="submit">
+          <ion-item>
+            <ion-label position="floating">Date</ion-label>
+            <ion-input type="date" formControlName="date" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Salah</ion-label>
+            <ion-input clearInput formControlName="salah" required></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">Count</ion-label>
+            <ion-input
+              type="number"
+              formControlName="count"
+              required
+            ></ion-input>
+          </ion-item>
+          <ion-button (click)="updateLog()">
+            <ion-icon slot="start" name="add"></ion-icon> Add New
+          </ion-button>
+        </form>
       </div>
-
-      <!-- Implement Delete & Update (How? Splice & a[2]=value)-->
-      <!-- Refresh list, Add UserAuthKey field, A notepad, A searchbar -->
-      <!-- <ion-searchbar class="ion-text-center"  placeholder="Search..." showcancelbutton="" (input)="filterList($event)" *ngIf="items.length>0"></ion-searchbar>       -->
-
-      <div *ngIf="items.length===0" class="ion-text-center" style="margin-top: 35%;">
-        <ion-label color="medium"> <em>Nothing here :(</em> </ion-label>
-      </div>
-
-      <ion-card class='card-items' *ngFor="let app of items;let i= index;">
+      <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
+      <ion-card class="card-items" *ngFor="let app of items;let i= index;">
         <ion-card-header>
           <ion-card-subtitle>#{{i+1}}</ion-card-subtitle>
           <ion-card-title>{{app.name}}</ion-card-title>
@@ -74,95 +88,214 @@
               <ion-icon name="pencil" slot="icon-only"></ion-icon>
             </ion-button>
             <ion-button color="success" (click)="saveItem(i)">
-              <ion-icon name="checkmark-done-outline" slot="icon-only"></ion-icon>
+              <ion-icon
+                name="checkmark-done-outline"
+                slot="icon-only"
+              ></ion-icon>
             </ion-button>
           </div>
-          <div class='codenbtn'>
+          <div class="codenbtn">
             <!-- d966d91c-664e-47e8-ba65-314d82fe1196 -->
-            <span class='code'> {{app.code}} </span>
-            <ion-button fill='none' (click)="copy(app.code)">
-              <ion-icon slot='icon-only' name='copy-outline'></ion-icon>
+            <span class="code"> {{app.code}} </span>
+            <ion-button fill="none" (click)="copy(app.code)">
+              <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
             </ion-button>
           </div>
         </ion-card-content>
       </ion-card>
-
     </div>
 
     <div *ngSwitchCase="'new'">
-      <div class="IDs">
-        <div class="auth-wrapper">
-          <!-- <ion-button color="success" class="save-auth" fill="clear" (click)="showRewardAlert()">
-            <ion-icon name="save-outline" slot="icon-only"></ion-icon>
-          </ion-button> -->
-          <ion-item>
-            <ion-icon name="key-outline" slot="start" class="ion-align-self-start"></ion-icon>
-            <ion-input placeholder="REST API Key" [(ngModel)]="authKey" required ionFocus="onAuthFocus($event)">
-            </ion-input>
-            <ion-icon size="small" color="success" name="save-outline" slot="end" (click)="showRewardAlert()"></ion-icon>
-          </ion-item>          
-        </div>
-        <ion-item>
-          <ion-icon name="locate-outline" slot="start" class="ion-align-self-start"></ion-icon>
-          <ion-input placeholder="App ID" [(ngModel)]="appId" required></ion-input>
-        </ion-item>
-      </div>
-      <ion-item>
-        <ion-label>Heading:*</ion-label>
-        <ion-input required [(ngModel)]="title" placeholder="An eye catching title..."></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>Message:*</ion-label>
-        <ion-input required [(ngModel)]="message" placeholder="Your descriptive text here..."></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label>Large Icon:</ion-label>
-        <ion-input placeholder="Enter image URL..." [(ngModel)]="bigIcon"></ion-input>
-      </ion-item>
-      <div *ngIf="bigIcon" class="ion-text-center">
-        <img [src]="bigIcon" width="50px" height="50px" alt="Large Icon">
-      </div>
-      <ion-item>
-        <ion-label>Big Picture:</ion-label>
-        <ion-input placeholder="Enter image URL..." [(ngModel)]="bigPic"></ion-input>
-      </ion-item>
-      <ion-textarea id="txtarea" style="margin: 10px;" rows="3" placeholder="Enter extra text... (Handle in your app using data.notification.payload.additionalData.extra)"
-       [(ngModel)]="extra"></ion-textarea>
-
-      <br>
-      <h4 class="ion-padding">NOTIFICATION PREVIEW</h4>
-      <ion-card>
-        <ion-grid>
-          <ion-row>
-            <ion-col *ngIf="bigIcon" size="3">
-              <img [src]="bigIcon" width="50px" height="50px" alt="Default Logo">
-            </ion-col>
-            <ion-col>
-              <b> {{title}} </b>
-              <p> {{message}} </p>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <div *ngIf="bigPic" class="ion-text-center">
-          <img [src]="bigPic" alt="Big picture">
-        </div>
+      <ion-card class="welcome-card">
+        <ion-card-header>
+          <ion-card-subtitle>Track your progress</ion-card-subtitle>
+          <ion-card-title>Total and Completed Prayers</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="chart-wrapper">
+            <google-chart [data]="pieChart"></google-chart>
+          </div>
+        </ion-card-content>
       </ion-card>
 
-      <ion-button (click)="newNotif('Test',title,message,bigIcon,bigPic,extra)" expand="full">Send to Test Devices
-      </ion-button>
-      <ion-button color="danger" (click)="presentAlertConfirm('All')" expand="full">Send to All
-      </ion-button>
-      <ion-input placeholder="Custom Segment Name..." [(ngModel)]="customSegment"></ion-input>
-      <ion-button color="success" (click)="presentAlertConfirm(customSegment)" expand="full">Send in: {{customSegment}}
-      </ion-button>
-      <div class="ion-text-center">
-        <ion-spinner *ngIf="spin"></ion-spinner>
-        <div class="status ion-padding">
-          <p>{{status}}</p>
-        </div>
-      </div>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Remaining Prayers</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid fixed>
+            <ion-row>
+              <ion-col>
+                <div class="col-label">Fajr</div>
+                <div class="stats-wrap">
+                  <span class="col-label-completed"
+                    >{{masterData.fajr.completed}}</span
+                  >
+                  /
+                  <span class="col-label-total">{{masterData.fajr.total}}</span>
+                </div>
+                <div class="col-label-remaining">
+                  {{masterData.fajr.total-masterData.fajr.completed}}
+                </div>
+              </ion-col>
+              <ion-col>
+                <div class="col-label">Zuhr</div>
+                <div class="stats-wrap">
+                  <span class="col-label-completed"
+                    >{{masterData.zuhr.completed}}</span
+                  >
+                  /
+                  <span class="col-label-total">{{masterData.zuhr.total}}</span>
+                </div>
+                <div class="col-label-remaining">
+                  {{masterData.zuhr.total-masterData.zuhr.completed}}
+                </div>
+              </ion-col>
+              <ion-col>
+                <div class="col-label">Asr</div>
+                <div class="stats-wrap">
+                  <span class="col-label-completed"
+                    >{{masterData.asr.completed}}</span
+                  >
+                  /
+                  <span class="col-label-total">{{masterData.asr.total}}</span>
+                </div>
+                <div class="col-label-remaining">
+                  {{masterData.asr.total-masterData.asr.completed}}
+                </div>
+              </ion-col>
+
+              <ion-col>
+                <div class="col-label">Maghrib</div>
+                <div class="stats-wrap">
+                  <span class="col-label-completed"
+                    >{{masterData.maghrib.completed}}</span
+                  >
+                  /
+                  <span class="col-label-total"
+                    >{{masterData.maghrib.total}}</span
+                  >
+                </div>
+                <div class="col-label-remaining">
+                  {{masterData.maghrib.total-masterData.maghrib.completed}}
+                </div>
+              </ion-col>
+              <ion-col>
+                <div class="col-label">Isha</div>
+                <div class="stats-wrap">
+                  <span class="col-label-completed"
+                    >{{masterData.isha.completed}}</span
+                  >
+                  /
+                  <span class="col-label-total">{{masterData.isha.total}}</span>
+                </div>
+                <div class="col-label-remaining">
+                  {{masterData.isha.total-masterData.isha.completed}}
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </ion-card>
     </div>
 
+    <div *ngSwitchCase="'master'">
+      <ion-card>
+        <div class="masterForm ion-text-center">
+          <form [formGroup]="masterForm" action="submit">
+            <ion-item>
+              <ion-label slot="start">Fajr</ion-label>
+              <ion-input
+                type="number"
+                formControlName="fajrTotal"
+                placeholder="Total"
+                slot="end"
+              ></ion-input>
+              <ion-input
+                type="number"
+                formControlName="fajrCompleted"
+                placeholder="Completed"
+                slot="end"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label slot="start">Zuhr</ion-label>
+              <ion-input
+                type="number"
+                formControlName="zuhrTotal"
+                placeholder="Total"
+                slot="end"
+              ></ion-input>
+              <ion-input
+                type="number"
+                formControlName="zuhrCompleted"
+                placeholder="Completed"
+                slot="end"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label slot="start">Asr</ion-label>
+              <ion-input
+                type="number"
+                formControlName="asrTotal"
+                placeholder="Total"
+                slot="end"
+              ></ion-input>
+              <ion-input
+                type="number"
+                formControlName="asrCompleted"
+                placeholder="Completed"
+                slot="end"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label slot="start">Maghrib</ion-label>
+              <ion-input
+                type="number"
+                formControlName="maghribTotal"
+                placeholder="Total"
+                slot="end"
+              ></ion-input>
+              <ion-input
+                type="number"
+                formControlName="maghribCompleted"
+                placeholder="Completed"
+                slot="end"
+              ></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label slot="start">Isha</ion-label>
+              <ion-input
+                type="number"
+                formControlName="ishaTotal"
+                placeholder="Total"
+                slot="end"
+              ></ion-input>
+              <ion-input
+                type="number"
+                formControlName="ishaCompleted"
+                placeholder="Completed"
+                slot="end"
+              ></ion-input>
+            </ion-item>
+          </form>
+          <ion-button (click)="updateMaster()">
+            <ion-icon slot="start" name="checkmark"></ion-icon>
+            Update Master Data
+          </ion-button>
+          <ion-button (click)="exportToJson(masterData)">
+            <ion-icon slot="start" name="copy-outline"></ion-icon>
+            Copy as JSON
+          </ion-button>
+        </div>
+      </ion-card>
+      <div
+        *ngIf="!masterDataPresent"
+        class="ion-text-center"
+        style="margin-top: 35%"
+      >
+        <ion-label color="medium"> <em>Nothing here :(</em> </ion-label>
+      </div>
+    </div>
   </div>
-
 </ion-content>

@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.sarbakaf.onesignalpush" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>OneSignal Push</name>
-    <description>Push Manager for OneSignal.</description>
-    <author email="shakes.ahmad@gmail.com" href="http://shakeeb.in/">Sarbakaf Group</author>
+<widget id="com.sarbakaf.qaza" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Qaza</name>
+    <description>Simple app to track qaza prayers.</description>
+    <author email="shakes.ahmad@gmail.com" href="https://shakeeb.in/">Sarbakaf Group</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -20,7 +20,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <platform name="android">
-        <preference name="android-targetSdkVersion" value="29" />
+        <preference name="android-targetSdkVersion" value="30" />
         <edit-config file="app/src/main/AndroidManifest.xml" mode="merge" target="/manifest/application" xmlns:android="http://schemas.android.com/apk/res/android">
             <application android:networkSecurityConfig="@xml/network_security_config" />
         </edit-config>
