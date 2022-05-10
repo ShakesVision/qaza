@@ -140,11 +140,22 @@ export class HomePage {
     });
   }
   updateLog() {
-    const id = "log" + this.getUniqueId();
-    console.log(id, this.qazaForm.getRawValue());
-    return this.storage
-      .set(id, JSON.stringify(this.qazaForm.getRawValue()))
-      .then((_) => console.log("log set successfully" + _));
+    const id = "log" + this.getUniqueId(this.qazaForm.controls.date.value);
+    let data: any = this.qazaForm.getRawValue();
+    this.storage.get(id).then((old: any) => {
+      console.log(old);
+      if (old) {
+        old.push(data);
+        return this.storage
+          .set(id, old)
+          .then((_) => console.log("log updated successfully", _));
+      } else {
+        return this.storage
+          .set(id, [data])
+          .then((_) => console.log("log set successfully", _));
+      }
+    });
+    // data.timestamp = new Date();
   }
 
   newNotif(
@@ -442,17 +453,19 @@ export class HomePage {
     navigator.clipboard.writeText(JSON.stringify(masterData));
     alert("Copied");
   }
-  getUniqueId() {
-    let date = new Date();
+  getUniqueId(date?) {
+    console.log(date);
+    date = date ? new Date(date) : new Date();
+    console.log(date);
     let components = [
       date.getDate(),
       date.getMonth() + 1,
       date.getFullYear().toString().substring(2),
-      date.getHours(),
-      date.getMinutes(),
-      date.getSeconds(),
-      date.getMilliseconds(),
+      // date.getHours(),
+      // date.getMinutes(),
+      // date.getSeconds(),
+      // date.getMilliseconds(),
     ];
-    return components.join("");
+    return components.join("-");
   }
 }
