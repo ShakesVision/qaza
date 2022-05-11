@@ -353,12 +353,10 @@ export class HomePage {
     });
     toast.present();
   }
-  async deleteConfirm(i, name) {
+  async deleteConfirm(id) {
     const alert = await this.alertController.create({
       header: "Confirm!",
-      message: `Do you really want to delete the entry #${
-        i + 1
-      } i.e. <strong>${name}</strong>?`,
+      message: `Do you really want to delete the entry for <strong><em>${id}</em></strong> completely?`,
       buttons: [
         {
           text: "Cancel",
@@ -371,7 +369,8 @@ export class HomePage {
           text: "Yes, Delete",
           cssClass: "deleteConfirmBtn",
           handler: () => {
-            this.delete(i);
+            // this.delete(i);
+            this.deleteLog(id);
           },
         },
       ],
@@ -495,5 +494,8 @@ export class HomePage {
         this.getlast10logs();
       });
     }
+  }
+  deleteLog(id) {
+    this.storage.remove(id).then((r) => this.getlast10logs());
   }
 }
