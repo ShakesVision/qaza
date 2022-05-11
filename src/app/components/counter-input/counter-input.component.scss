@@ -1,0 +1,25 @@
+.counter-wrapper {
+  display: inline-block;
+  position: relative;
+  input {
+    width: 48px;
+    height: 40px;
+    background-color: transparent;
+    text-align: center;
+    border: 1px solid var(--ion-color-medium);
+  }
+  .btn {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    background-color: var(--ion-color-medium);
+    // top: 25%;
+    &.btn-plus {
+      top: 1px;
+    }
+    &.btn-minus {
+      bottom: -13px;
+    }
+  }
+}

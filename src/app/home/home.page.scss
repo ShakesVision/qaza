@@ -45,7 +45,7 @@ ion-card.card-items {
 }
 .inputElements ion-item,
 .IDs ion-item {
-  margin: 5px 10px;
+  margin: 5px;
   border: 1px solid rgba(23, 223, 90, 0.4);
   border-radius: 10px;
 }
@@ -77,6 +77,20 @@ ion-card.card-items {
 }
 .chart-wrapper {
   // overflow-x: scroll;
+}
+.counter-labels-inputs-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  .counter-label-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 15px 5px;
+    ion-label {
+      font-size: x-large;
+      margin-bottom: 10px;
+    }
+  }
 }
 ion-grid ion-col {
   text-align: center;
