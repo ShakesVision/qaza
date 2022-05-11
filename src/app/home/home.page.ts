@@ -57,13 +57,14 @@ export class HomePage implements AfterViewInit {
   masterDataPresent: boolean;
   qazaForm = new FormGroup({
     date: new FormControl(""),
-    fajr: new FormControl(""),
-    zuhr: new FormControl(""),
-    asr: new FormControl(""),
-    maghrib: new FormControl(""),
-    isha: new FormControl(""),
-    witr: new FormControl(""),
-    fast: new FormControl(""),
+    fajr: new FormControl(0),
+    zuhr: new FormControl(0),
+    asr: new FormControl(0),
+    maghrib: new FormControl(0),
+    isha: new FormControl(0),
+    witr: new FormControl(0),
+    fast: new FormControl(0),
+    timestamp: new FormControl(new Date()),
   });
   masterForm = new FormGroup({
     fajrTotal: new FormControl(""),
@@ -149,8 +150,10 @@ export class HomePage implements AfterViewInit {
   }
   updateLog() {
     const id = "log" + this.getUniqueId(this.qazaForm.controls.date.value);
+    console.log(this.qazaForm.getRawValue());
     let data: any = this.qazaForm.getRawValue();
-    data.timestamp = new Date();
+    // data.timestamp = new Date();
+    this.qazaForm.controls.timestamp.setValue(new Date());
     this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
@@ -512,5 +515,25 @@ export class HomePage implements AfterViewInit {
   updateCountInFormontrol(v: number, formControlName: string) {
     console.log("count=> " + v);
     this.qazaForm.controls[formControlName].setValue(v);
+  }
+  populateInputFieldsForUpdate(r) {
+    console.log(r);
+    //not working, probably because timestamp formcontrol is not prresent in the ui.
+    //also maybe because formControl isn't really targetted from home, but from counter-input
+    this.qazaForm.patchValue(r);
+
+    // let controlNames = [
+    //   "date",
+    //   "fajr",
+    //   "zuhr",
+    //   "asr",
+    //   "maghrib",
+    //   "isha",
+    //   "witr",
+    //   "fast",
+    // ];
+    // controlNames.forEach((control) => {
+    //   this.qazaForm.controls[control].setValue(r[control]);
+    // });
   }
 }

@@ -138,26 +138,36 @@
             <ion-card-title>{{app.salah}}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <p *ngFor="let r of app;let j= index;">
+            <div *ngFor="let r of app;let j= index;">
               Fajr:{{r.fajr}}, Zuhr:{{r.zuhr}}, Asr:{{r.asr}},
               Maghrib:{{r.maghrib}}, Isha:{{r.isha}}, Witr:{{r.witr}},
               Fast:{{r.fast}}
-              <ion-icon slot="end" name="time-outline"></ion-icon>
-              <ion-label slot="end" color="medium">
-                {{r.timestamp ? (r.timestamp| date:'mediumTime') : (r.date |
-                date:'mediumTime')}}
-              </ion-label>
-              <ion-button slot="end" fill="none" (click)="exportToJson(r)">
-                <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
-              </ion-button>
-              <ion-button
-                slot="end"
-                fill="none"
-                (click)="deleteOneRecord('log'+getUniqueId(app[0].date),app,j)"
-              >
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-              </ion-button>
-            </p>
+
+              <ion-item class="row-controls">
+                <ion-icon slot="start" name="time-outline"></ion-icon>
+                <ion-label slot="start" color="medium">
+                  {{r.timestamp ? (r.timestamp| date:'mediumTime') : (r.date |
+                  date:'mediumTime')}}
+                </ion-label>
+                <ion-button slot="end" fill="none" (click)="exportToJson(r)">
+                  <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+                </ion-button>
+                <ion-button
+                  slot="end"
+                  fill="none"
+                  (click)="populateInputFieldsForUpdate(r)"
+                >
+                  <ion-icon slot="icon-only" name="pencil"></ion-icon>
+                </ion-button>
+                <ion-button
+                  slot="end"
+                  fill="none"
+                  (click)="deleteOneRecord('log'+getUniqueId(app[0].date),app,j)"
+                >
+                  <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+                </ion-button>
+              </ion-item>
+            </div>
             <div class="hangingBtns">
               <ion-button
                 color="danger"
