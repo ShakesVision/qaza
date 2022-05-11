@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, OnInit, ViewChild } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {
   AlertController,
@@ -17,14 +17,16 @@ import {
 import { Master } from "../models/db-model";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GoogleChartInterface } from "ng2-google-charts";
+import { CounterInputComponent } from "../components/counter-input/counter-input.component";
 
 @Component({
   selector: "app-home",
   templateUrl: "home.page.html",
   styleUrls: ["home.page.scss"],
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
   @ViewChild(IonContent, { static: false }) content: IonContent;
+  @ViewChild("fajr", { static: false }) fajr: CounterInputComponent;
   constructor(
     public httpClient: HttpClient,
     public plt: Platform,
@@ -497,5 +499,12 @@ export class HomePage {
   }
   deleteLog(id) {
     this.storage.remove(id).then((r) => this.getlast10logs());
+  }
+  ngAfterViewInit() {
+    console.log("running aftervewiinit");
+    this.fajr.countChange.subscribe((v) => console.log(v));
+  }
+  updateCountInFormontrol(e) {
+    console.log("count=> " + e);
   }
 }

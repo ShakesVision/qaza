@@ -53,7 +53,9 @@
       <div class="inputElements ion-text-center">
         <form [formGroup]="qazaForm" action="submit">
           <ion-item>
-            <ion-label position="floating">Date</ion-label>
+            <ion-label position="floating"
+              >Date <span class="arabic">تاریخ</span></ion-label
+            >
             <!-- <ion-input type="date" formControlName="date" required></ion-input> -->
             <ion-datetime
               presentation="date"
@@ -66,12 +68,17 @@
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">فجر</div>
               <ion-label>F</ion-label>
-              <counter-input></counter-input>
+              <counter-input
+                #fajr
+                (countChange)="updateCountInFormontrol($event)"
+              ></counter-input>
             </div>
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">ظہر</div>
               <ion-label>Z</ion-label>
-              <counter-input></counter-input>
+              <counter-input
+                (countChange)="updateCountInFormontrol($event)"
+              ></counter-input>
             </div>
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">عصر</div>
@@ -95,15 +102,19 @@
             </div>
           </div>
           <ion-item>
-            <ion-label>Fast </ion-label>
+            <ion-label>Fast <span class="arabic">صوم</span></ion-label>
             <counter-input slot="end"></counter-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">Salah</ion-label>
+            <ion-label position="floating"
+              >Salah <span class="arabic">صلوٰۃ</span></ion-label
+            >
             <ion-input clearInput formControlName="salah" required></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">Count</ion-label>
+            <ion-label position="floating"
+              >Count <span class="arabic">تعداد</span></ion-label
+            >
             <ion-input
               type="number"
               formControlName="count"
