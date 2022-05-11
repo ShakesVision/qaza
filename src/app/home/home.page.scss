@@ -86,6 +86,9 @@ ion-card.card-items {
     flex-direction: column;
     justify-content: center;
     margin: 15px 5px;
+    .counter-label-arabic {
+      font-size: x-small;
+    }
     ion-label {
       font-size: x-large;
       margin-bottom: 10px;
