@@ -69,9 +69,11 @@ ion-card.card-items {
   text-transform: uppercase;
   font-size: xx-small;
   margin-right: 5px;
-}
-.topBtns ion-label {
-  letter-spacing: 1px;
+  cursor: pointer;
+  ion-label {
+    letter-spacing: 2px;
+    font-size: 7px;
+  }
 }
 .chart-wrapper {
   // overflow-x: scroll;

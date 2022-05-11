@@ -143,6 +143,7 @@ export class HomePage {
   updateLog() {
     const id = "log" + this.getUniqueId(this.qazaForm.controls.date.value);
     let data: any = this.qazaForm.getRawValue();
+    data.timestamp = new Date();
     this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
@@ -158,7 +159,6 @@ export class HomePage {
         });
       }
     });
-    // data.timestamp = new Date();
   }
 
   newNotif(
@@ -452,14 +452,13 @@ export class HomePage {
       },
     };
   }
-  exportToJson(masterData) {
-    navigator.clipboard.writeText(JSON.stringify(masterData));
-    alert("Copied");
+  exportToJson(data) {
+    navigator.clipboard.writeText(JSON.stringify(data));
+    this.presentToast("Copied");
   }
   getUniqueId(date?) {
-    console.log(date);
+    // console.log(date);
     date = date ? new Date(date) : new Date();
-    console.log(date);
     let components = [
       date.getDate(),
       date.getMonth() + 1,
@@ -477,11 +476,24 @@ export class HomePage {
     return this.getUniqueId(d);
   });
   getlast10logs() {
+    this.items = [];
     this.last10dates.forEach((d) => {
       this.storage.get("log" + d).then((r) => {
         console.log(r, "log" + d);
-        this.items.push(r);
+        this.items.push(r?.filter(Boolean));
       });
     });
+  }
+  deleteOneRecord(id, value, index) {
+    console.log("deleting " + id, value);
+    if (value.length === 1)
+      this.storage.remove(id).then((r) => this.getlast10logs());
+    else {
+      console.log(value.length, " value.length is !=1");
+      value.splice(index, 1);
+      this.storage.set(id, value).then((r) => {
+        this.getlast10logs();
+      });
+    }
   }
 }

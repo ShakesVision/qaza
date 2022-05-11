@@ -2,14 +2,14 @@
   <ion-toolbar color="primary">
     <ion-title> Qaza Tracker </ion-title>
     <ion-buttons slot="end">
-      <div class="topBtns">
-        <ion-button routerLink="/notepad">
+      <div class="topBtns" routerLink="/notepad">
+        <ion-button>
           <ion-icon name="receipt"></ion-icon>
         </ion-button>
         <ion-label>Notepad</ion-label>
       </div>
-      <div class="topBtns">
-        <ion-button routerLink="/about">
+      <div class="topBtns" routerLink="/about">
+        <ion-button>
           <ion-icon name="information-circle"></ion-icon>
         </ion-button>
         <ion-label>About</ion-label>
@@ -81,21 +81,34 @@
       </div>
       <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
       <div class="card-wrapper" *ngFor="let app of items;let i= index;">
-        <ion-card class="card-items" *ngIf="app">
+        <ion-card class="card-items" *ngIf="app && app.length>0">
           <ion-card-header>
-            <ion-card-subtitle>{{app[0].date| date}}</ion-card-subtitle>
+            <ion-card-subtitle
+              >{{app[0].date| date:'fullDate'}}</ion-card-subtitle
+            >
             <ion-card-title>{{app.salah}}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <ion-item *ngFor="let r of app">
+            <ion-item *ngFor="let r of app;let j= index;">
               {{r.salah}} : {{r.count}}
               <ion-icon slot="end" name="time-outline"></ion-icon>
               <ion-label slot="end" color="medium">
-                {{r.date | date}}
+                {{r.timestamp ? (r.timestamp| date:'mediumTime') : (r.date |
+                date:'mediumTime')}}
               </ion-label>
+              <ion-button slot="end" fill="none" (click)="exportToJson(r)">
+                <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                slot="end"
+                fill="none"
+                (click)="deleteOneRecord('log'+getUniqueId(app[0].date),app,j)"
+              >
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
             </ion-item>
             <div class="hangingBtns">
-              <ion-button color="danger" (click)="deleteConfirm(i,app.name)">
+              <ion-button color="danger" (click)="deleteConfirm(i)">
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>
               <ion-button (click)="update(app.salah,app.count)">
@@ -111,28 +124,19 @@
             <div class="codenbtn">
               <!-- d966d91c-664e-47e8-ba65-314d82fe1196 -->
               <span class="code"> {{app.code}} </span>
-              <ion-button fill="none" (click)="copy(app.code)">
+              <ion-button fill="none" (click)="exportToJson(app)">
                 <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
               </ion-button>
             </div>
+            <ion-label color="medium" class="unique-id"
+              >log{{getUniqueId(app[0].date)}}</ion-label
+            >
           </ion-card-content>
         </ion-card>
       </div>
     </div>
 
     <div *ngSwitchCase="'new'">
-      <ion-card class="welcome-card">
-        <ion-card-header>
-          <ion-card-subtitle>Track your progress</ion-card-subtitle>
-          <ion-card-title>Total and Completed Prayers</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <div class="chart-wrapper">
-            <google-chart [data]="pieChart"></google-chart>
-          </div>
-        </ion-card-content>
-      </ion-card>
-
       <ion-card>
         <ion-card-header>
           <ion-card-title>Remaining Prayers</ion-card-title>
@@ -210,6 +214,16 @@
               </ion-col>
             </ion-row>
           </ion-grid>
+        </ion-card-content> </ion-card
+      ><ion-card class="welcome-card">
+        <ion-card-header>
+          <ion-card-subtitle>Track your progress</ion-card-subtitle>
+          <ion-card-title>Total and Completed Prayers</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="chart-wrapper">
+            <google-chart [data]="pieChart"></google-chart>
+          </div>
         </ion-card-content>
       </ion-card>
     </div>
