@@ -57,8 +57,13 @@ export class HomePage implements AfterViewInit {
   masterDataPresent: boolean;
   qazaForm = new FormGroup({
     date: new FormControl(""),
-    salah: new FormControl(""),
-    count: new FormControl(""),
+    fajr: new FormControl(""),
+    zuhr: new FormControl(""),
+    asr: new FormControl(""),
+    maghrib: new FormControl(""),
+    isha: new FormControl(""),
+    witr: new FormControl(""),
+    fast: new FormControl(""),
   });
   masterForm = new FormGroup({
     fajrTotal: new FormControl(""),
@@ -502,9 +507,10 @@ export class HomePage implements AfterViewInit {
   }
   ngAfterViewInit() {
     console.log("running aftervewiinit");
-    this.fajr.countChange.subscribe((v) => console.log(v));
+    // this.fajr.countChange.subscribe((v) => console.log(v));
   }
-  updateCountInFormontrol(e) {
-    console.log("count=> " + e);
+  updateCountInFormontrol(v: number, formControlName: string) {
+    console.log("count=> " + v);
+    this.qazaForm.controls[formControlName].setValue(v);
   }
 }

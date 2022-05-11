@@ -70,56 +70,58 @@
               <ion-label>F</ion-label>
               <counter-input
                 #fajr
-                (countChange)="updateCountInFormontrol($event)"
+                (countChange)="updateCountInFormontrol($event,'fajr')"
+                formControlName="fajr"
               ></counter-input>
             </div>
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">ظہر</div>
               <ion-label>Z</ion-label>
               <counter-input
-                (countChange)="updateCountInFormontrol($event)"
+                (countChange)="updateCountInFormontrol($event,'zuhr')"
+                formControlName="zuhr"
               ></counter-input>
             </div>
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">عصر</div>
               <ion-label>A</ion-label>
-              <counter-input></counter-input>
+              <counter-input
+                (countChange)="updateCountInFormontrol($event,'asr')"
+                formControlName="asr"
+              ></counter-input>
             </div>
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">مغرب</div>
               <ion-label>M</ion-label>
-              <counter-input></counter-input>
+              <counter-input
+                (countChange)="updateCountInFormontrol($event,'maghrib')"
+                formControlName="maghrib"
+              ></counter-input>
             </div>
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">عشاء</div>
               <ion-label>I</ion-label>
-              <counter-input></counter-input>
+              <counter-input
+                (countChange)="updateCountInFormontrol($event,'isha')"
+                formControlName="isha"
+              ></counter-input>
             </div>
             <div class="counter-label-input">
               <div class="counter-label-arabic arabic">وتر</div>
               <ion-label>W</ion-label>
-              <counter-input></counter-input>
+              <counter-input
+                (countChange)="updateCountInFormontrol($event,'witr')"
+                formControlName="witr"
+              ></counter-input>
             </div>
           </div>
           <ion-item>
             <ion-label>Fast <span class="arabic">صوم</span></ion-label>
-            <counter-input slot="end"></counter-input>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating"
-              >Salah <span class="arabic">صلوٰۃ</span></ion-label
-            >
-            <ion-input clearInput formControlName="salah" required></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating"
-              >Count <span class="arabic">تعداد</span></ion-label
-            >
-            <ion-input
-              type="number"
-              formControlName="count"
-              required
-            ></ion-input>
+            <counter-input
+              slot="end"
+              (countChange)="updateCountInFormontrol($event,'fast')"
+              formControlName="fast"
+            ></counter-input>
           </ion-item>
           <ion-button (click)="updateLog()">
             <ion-icon slot="start" name="add"></ion-icon> Add New
@@ -136,8 +138,10 @@
             <ion-card-title>{{app.salah}}</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-            <ion-item *ngFor="let r of app;let j= index;">
-              {{r.salah}} : {{r.count}}
+            <p *ngFor="let r of app;let j= index;">
+              Fajr:{{r.fajr}}, Zuhr:{{r.zuhr}}, Asr:{{r.asr}},
+              Maghrib:{{r.maghrib}}, Isha:{{r.isha}}, Witr:{{r.witr}},
+              Fast:{{r.fast}}
               <ion-icon slot="end" name="time-outline"></ion-icon>
               <ion-label slot="end" color="medium">
                 {{r.timestamp ? (r.timestamp| date:'mediumTime') : (r.date |
@@ -153,7 +157,7 @@
               >
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
-            </ion-item>
+            </p>
             <div class="hangingBtns">
               <ion-button
                 color="danger"
