@@ -1,4 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { AbstractControl, FormControl } from "@angular/forms";
 
 @Component({
   selector: "counter-input",
@@ -7,6 +8,7 @@ import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 })
 export class CounterInputComponent implements OnInit {
   @Output() countChange = new EventEmitter<any>();
+  @Input() control: AbstractControl = new FormControl();
   count: number = 0;
   constructor() {}
 

@@ -5,6 +5,7 @@
     placeholder="0"
     [(ngModel)]="count"
     (input)="inputChanged($event)"
+    [formControl]="control"
   />
   <button class="btn btn-plus" (click)="updateCounter(1)">+</button>
 </div>

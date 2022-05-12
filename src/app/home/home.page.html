@@ -71,7 +71,7 @@
               <counter-input
                 #fajr
                 (countChange)="updateCountInFormontrol($event,'fajr')"
-                formControlName="fajr"
+                [control]="qazaForm.controls.fajr"
               ></counter-input>
             </div>
             <div class="counter-label-input">
@@ -79,7 +79,7 @@
               <ion-label>Z</ion-label>
               <counter-input
                 (countChange)="updateCountInFormontrol($event,'zuhr')"
-                formControlName="zuhr"
+                [control]="qazaForm.controls.zuhr"
               ></counter-input>
             </div>
             <div class="counter-label-input">
@@ -87,7 +87,7 @@
               <ion-label>A</ion-label>
               <counter-input
                 (countChange)="updateCountInFormontrol($event,'asr')"
-                formControlName="asr"
+                [control]="qazaForm.controls.asr"
               ></counter-input>
             </div>
             <div class="counter-label-input">
@@ -95,7 +95,7 @@
               <ion-label>M</ion-label>
               <counter-input
                 (countChange)="updateCountInFormontrol($event,'maghrib')"
-                formControlName="maghrib"
+                [control]="qazaForm.controls.maghrib"
               ></counter-input>
             </div>
             <div class="counter-label-input">
@@ -103,7 +103,7 @@
               <ion-label>I</ion-label>
               <counter-input
                 (countChange)="updateCountInFormontrol($event,'isha')"
-                formControlName="isha"
+                [control]="qazaForm.controls.isha"
               ></counter-input>
             </div>
             <div class="counter-label-input">
@@ -111,7 +111,7 @@
               <ion-label>W</ion-label>
               <counter-input
                 (countChange)="updateCountInFormontrol($event,'witr')"
-                formControlName="witr"
+                [control]="qazaForm.controls.witr"
               ></counter-input>
             </div>
           </div>
@@ -120,7 +120,7 @@
             <counter-input
               slot="end"
               (countChange)="updateCountInFormontrol($event,'fast')"
-              formControlName="fast"
+              [control]="qazaForm.controls.fast"
             ></counter-input>
           </ion-item>
           <ion-button (click)="updateLog()">
