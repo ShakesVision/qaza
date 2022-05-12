@@ -199,8 +199,17 @@
         </ion-card>
       </div>
       <div class="load-more ion-text-center">
+        <div>
+          <ion-label color="medium">
+            <em
+              >Showing {{datesArray[0]|date:'mediumDate'}} -
+              {{datesArray[datesArray.length-1]|date:'mediumDate'}}
+            </em>
+          </ion-label>
+        </div>
+        <ion-input type="number" value="10" #goBackX></ion-input>
         <ion-button
-          (click)="getlastXlogs(10,datesArray[datesArray.length-1],false)"
+          (click)="getlastXlogs(+goBackX.value,datesArray[datesArray.length-1],false)"
         >
           <ion-icon slot="start" name="add"></ion-icon>
           More

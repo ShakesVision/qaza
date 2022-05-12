@@ -166,7 +166,7 @@ export class HomePage implements AfterViewInit {
       } else {
         return this.storage.set(id, [data]).then((_) => {
           console.log("log set successfully", _);
-          this.getlastXlogs();
+          this.getlastXlogs(10, new Date(), true);
         });
       }
     });
@@ -480,18 +480,29 @@ export class HomePage implements AfterViewInit {
     ];
     return components.join("-");
   }
-  lastXdatesFrom(x: number, d: Date = new Date()): string[] {
-    let dateArr: string[] = [];
+  lastXdatesFrom = (x, dt?) =>
     [...Array(x)].map((_, i) => {
+      const d = new Date(dt);
       d.setDate(d.getDate() - i);
       this.datesArray.push(d);
-      dateArr.push(this.getUniqueId(d));
+      return this.getUniqueId(d);
     });
-    return dateArr;
-  }
-  getlastXlogs(x: number = 10, d: Date = new Date(), reset: boolean = false) {
+  // lastXdatesFrom(x: number, d: Date): string[] {
+  //   let dateArr: string[] = [];
+  //   dateArr = [...Array(x)].map((_, i) => {
+  //     d.setDate(d.getDate() - i);
+  //     console.log(d);
+  //     this.datesArray.push(d);
+  //     return this.getUniqueId(d);
+  //   });
+  //   console.log(dateArr);
+  //   // return (dateArr = this.last10dates(x, d));
+  //   return dateArr;
+  // }
+  getlastXlogs(x: number = 10, d: Date = new Date(), reset: boolean = true) {
     // x:number=10
-    if (reset) {
+    if (reset === true) {
+      console.log("in reset");
       this.items = [];
       this.datesArray = [];
     }
