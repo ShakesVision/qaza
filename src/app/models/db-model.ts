@@ -19,4 +19,12 @@ export interface Master {
     total: number;
     completed: number;
   };
+  witr: {
+    total: number;
+    completed: number;
+  };
+  fast: {
+    total: number;
+    completed: number;
+  };
 }

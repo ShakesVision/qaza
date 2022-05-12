@@ -142,12 +142,51 @@ export class HomePage implements AfterViewInit {
         total: this.masterForm.controls.ishaTotal.value,
         completed: this.masterForm.controls.ishaCompleted.value,
       },
+      witr: {
+        total: this.masterForm.controls.witrTotal.value,
+        completed: this.masterForm.controls.witrCompleted.value,
+      },
+      fast: {
+        total: this.masterForm.controls.fastTotal.value,
+        completed: this.masterForm.controls.fastCompleted.value,
+      },
     };
     return this.storage.set("master", this.masterData).then((_) => {
       console.log("master set successfully", _);
-      alert("Master updated successfully.");
+      this.presentToast("Master updated successfully.");
       this.getAll();
     });
+  }
+  appendInMasterData() {
+    this.masterForm.controls.fajrCompleted.setValue(
+      this.qazaForm.controls.fajr.value +
+        this.masterForm.controls.fajrCompleted.value
+    );
+    this.masterForm.controls.zuhrCompleted.setValue(
+      this.qazaForm.controls.zuhr.value +
+        this.masterForm.controls.zuhrCompleted.value
+    );
+    this.masterForm.controls.asrCompleted.setValue(
+      this.qazaForm.controls.asr.value +
+        this.masterForm.controls.asrCompleted.value
+    );
+    this.masterForm.controls.maghribCompleted.setValue(
+      this.qazaForm.controls.maghrib.value +
+        this.masterForm.controls.maghribCompleted.value
+    );
+    this.masterForm.controls.ishaCompleted.setValue(
+      this.qazaForm.controls.isha.value +
+        this.masterForm.controls.ishaCompleted.value
+    );
+    this.masterForm.controls.witrCompleted.setValue(
+      this.qazaForm.controls.witr.value +
+        this.masterForm.controls.witrCompleted.value
+    );
+    this.masterForm.controls.fastCompleted.setValue(
+      this.qazaForm.controls.fast.value +
+        this.masterForm.controls.fastCompleted.value
+    );
+    this.updateMaster();
   }
   updateLog() {
     const id = "log" + this.getUniqueId(this.qazaForm.controls.date.value);
@@ -155,6 +194,7 @@ export class HomePage implements AfterViewInit {
     let data: any = this.qazaForm.getRawValue();
     // data.timestamp = new Date();
     this.qazaForm.controls.timestamp.setValue(new Date());
+    this.appendInMasterData();
     this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
@@ -447,6 +487,7 @@ export class HomePage implements AfterViewInit {
           this.masterData.maghrib.total,
         ],
         ["Isha", this.masterData.isha.completed, this.masterData.isha.total],
+        ["Witr", this.masterData.witr.completed, this.masterData.witr.total],
       ],
       formatters: [
         {
