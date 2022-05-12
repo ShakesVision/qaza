@@ -55,6 +55,7 @@ export class HomePage implements AfterViewInit {
   subscription;
   masterData: Master;
   masterDataPresent: boolean;
+  datesArray: Date[] = [];
   qazaForm = new FormGroup({
     date: new FormControl(""),
     fajr: new FormControl(0),
@@ -85,7 +86,7 @@ export class HomePage implements AfterViewInit {
       this.showBanner();
     });
     this.getAll();
-    this.getlast10logs();
+    this.getlastXlogs();
     document.addEventListener(
       this.admobFree.events.REWARD_VIDEO_REWARD,
       (result) => {
@@ -160,12 +161,12 @@ export class HomePage implements AfterViewInit {
         old.push(data);
         return this.storage.set(id, old).then((_) => {
           console.log("log updated successfully", _);
-          this.getlast10logs();
+          this.getlastXlogs();
         });
       } else {
         return this.storage.set(id, [data]).then((_) => {
           console.log("log set successfully", _);
-          this.getlast10logs();
+          this.getlastXlogs();
         });
       }
     });
@@ -465,13 +466,13 @@ export class HomePage implements AfterViewInit {
     navigator.clipboard.writeText(JSON.stringify(data));
     this.presentToast("Copied");
   }
-  getUniqueId(date?) {
+  getUniqueId(date?): string {
     // console.log(date);
     date = date ? new Date(date) : new Date();
     let components = [
-      date.getDate(),
-      date.getMonth() + 1,
-      date.getFullYear().toString().substring(2),
+      date?.getDate(),
+      date?.getMonth() + 1,
+      date?.getFullYear().toString().substring(2),
       // date.getHours(),
       // date.getMinutes(),
       // date.getSeconds(),
@@ -479,14 +480,23 @@ export class HomePage implements AfterViewInit {
     ];
     return components.join("-");
   }
-  last10dates = [...Array(10)].map((_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
-    return this.getUniqueId(d);
-  });
-  getlast10logs() {
-    this.items = [];
-    this.last10dates.forEach((d) => {
+  lastXdatesFrom(x: number, d: Date = new Date()): string[] {
+    let dateArr: string[] = [];
+    [...Array(x)].map((_, i) => {
+      d.setDate(d.getDate() - i);
+      this.datesArray.push(d);
+      dateArr.push(this.getUniqueId(d));
+    });
+    return dateArr;
+  }
+  getlastXlogs(x: number = 10, d: Date = new Date(), reset: boolean = false) {
+    // x:number=10
+    if (reset) {
+      this.items = [];
+      this.datesArray = [];
+    }
+    console.log(x, d);
+    this.lastXdatesFrom(x, d).forEach((d) => {
       this.storage.get("log" + d).then((r) => {
         console.log(r, "log" + d);
         this.items.push(r?.filter(Boolean));
@@ -496,17 +506,17 @@ export class HomePage implements AfterViewInit {
   deleteOneRecord(id, value, index) {
     console.log("deleting " + id, value);
     if (value.length === 1)
-      this.storage.remove(id).then((r) => this.getlast10logs());
+      this.storage.remove(id).then((r) => this.getlastXlogs());
     else {
       console.log(value.length, " value.length is !=1");
       value.splice(index, 1);
       this.storage.set(id, value).then((r) => {
-        this.getlast10logs();
+        this.getlastXlogs();
       });
     }
   }
   deleteLog(id) {
-    this.storage.remove(id).then((r) => this.getlast10logs());
+    this.storage.remove(id).then((r) => this.getlastXlogs());
   }
   ngAfterViewInit() {
     console.log("running aftervewiinit");

@@ -198,6 +198,14 @@
           </ion-card-content>
         </ion-card>
       </div>
+      <div class="load-more ion-text-center">
+        <ion-button
+          (click)="getlastXlogs(10,datesArray[datesArray.length-1],false)"
+        >
+          <ion-icon slot="start" name="add"></ion-icon>
+          More
+        </ion-button>
+      </div>
     </div>
 
     <div *ngSwitchCase="'new'">
