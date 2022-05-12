@@ -68,16 +68,20 @@ export class HomePage implements AfterViewInit {
     timestamp: new FormControl(new Date()),
   });
   masterForm = new FormGroup({
-    fajrTotal: new FormControl(""),
-    fajrCompleted: new FormControl(""),
-    zuhrTotal: new FormControl(""),
-    zuhrCompleted: new FormControl(""),
-    asrTotal: new FormControl(""),
-    asrCompleted: new FormControl(""),
-    maghribTotal: new FormControl(""),
-    maghribCompleted: new FormControl(""),
-    ishaTotal: new FormControl(""),
-    ishaCompleted: new FormControl(""),
+    fajrTotal: new FormControl(0),
+    fajrCompleted: new FormControl(0),
+    zuhrTotal: new FormControl(0),
+    zuhrCompleted: new FormControl(0),
+    asrTotal: new FormControl(0),
+    asrCompleted: new FormControl(0),
+    maghribTotal: new FormControl(0),
+    maghribCompleted: new FormControl(0),
+    ishaTotal: new FormControl(0),
+    ishaCompleted: new FormControl(0),
+    witrTotal: new FormControl(0),
+    witrCompleted: new FormControl(0),
+    fastTotal: new FormControl(0),
+    fastCompleted: new FormControl(0),
   });
   public pieChart: GoogleChartInterface;
 
