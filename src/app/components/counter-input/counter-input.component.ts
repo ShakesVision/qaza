@@ -14,6 +14,13 @@ export class CounterInputComponent implements OnInit {
 
   updateCounter(v: number) {
     this.count += v;
+    this.emitCountValue();
+  }
+  inputChanged(e) {
+    console.log(e.target.value, this.count);
+    this.emitCountValue();
+  }
+  emitCountValue() {
     this.countChange.emit(this.count);
   }
 }
