@@ -289,13 +289,13 @@ export class HomePage implements AfterViewInit {
   update(name, code) {
     this.name_input = name;
     this.code_input = code;
-    this.ScrollToTop();
+    this.scrollToTop();
   }
   delete(index: number) {
     this.items.splice(index, 1);
     this.setAll(this.items).then((_) => this.getAll());
   }
-  ScrollToTop() {
+  scrollToTop() {
     this.content.scrollToTop(1000);
   }
   doRefresh(event) {
@@ -531,8 +531,7 @@ export class HomePage implements AfterViewInit {
     this.storage.remove(id).then((r) => this.getlastXlogs());
   }
   ngAfterViewInit() {
-    console.log("running aftervewiinit");
-    // this.fajr.countChange.subscribe((v) => console.log(v));
+    this.qazaForm.controls.date.setValue(new Date().toISOString());
   }
   updateCountInFormontrol(v: number, formControlName: string) {
     console.log("count=> " + v);
@@ -543,6 +542,7 @@ export class HomePage implements AfterViewInit {
     //not working, probably because timestamp formcontrol is not prresent in the ui.
     //also maybe because formControl isn't really targetted from home, but from counter-input
     this.qazaForm.patchValue(r);
+    this.scrollToTop();
 
     // let controlNames = [
     //   "date",

@@ -132,7 +132,7 @@
       <div class="card-wrapper" *ngFor="let app of items;let i= index;">
         <ion-card class="card-items" *ngIf="app && app.length>0">
           <ion-card-header>
-            <ion-card-subtitle
+            <ion-card-subtitle [id]="app[0].date| date:'shortDate'"
               >{{app[0].date| date:'fullDate'}}</ion-card-subtitle
             >
             <ion-card-title>{{app.salah}}</ion-card-title>
