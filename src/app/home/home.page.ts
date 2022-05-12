@@ -506,6 +506,7 @@ export class HomePage implements AfterViewInit {
       this.items = [];
       this.datesArray = [];
     }
+    if (this.datesArray.length > 0) d.setDate(d.getDate() - 1);
     console.log(x, d);
     this.lastXdatesFrom(x, d).forEach((d) => {
       this.storage.get("log" + d).then((r) => {
