@@ -25,7 +25,12 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
-@import url(https://fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css);
+@font-face {
+  font-family: "Noto";
+  src: url("assets/fonts/Noto.woff2") format("woff2"),
+    url("https://fonts.googleapis.com/earlyaccess/notonastaliqurdudraft.css")
+      format("woff2");
+}
 .arabic {
-  font-family: "Noto Nastaliq Urdu Draft", Times, "Times New Roman", serif;
+  font-family: "Noto", Times, "Times New Roman", serif;
 }
