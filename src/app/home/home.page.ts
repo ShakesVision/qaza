@@ -15,6 +15,7 @@ import {
   AdMobFreeRewardVideoConfig,
 } from "@ionic-native/admob-free/ngx";
 import {
+  DatabasesEnum,
   Master,
   MasterCompletedModel,
   QazaItemModel,
@@ -61,6 +62,7 @@ export class HomePage implements AfterViewInit {
   masterDataPresent: boolean;
   datesArray: Date[] = [];
   goBackNum: number = 10;
+  logKeysArray: string[];
   qazaForm = new FormGroup({
     date: new FormControl(""),
     fajr: new FormControl(0),
@@ -94,6 +96,7 @@ export class HomePage implements AfterViewInit {
     this.plt.ready().then(() => {
       this.showBanner();
     });
+    this.loadLogKeysArray();
     this.getAll();
     this.getlastXlogs();
     document.addEventListener(
@@ -168,7 +171,7 @@ export class HomePage implements AfterViewInit {
         completed: this.masterForm.controls.fastCompleted.value,
       },
     };
-    return this.storage.set("master", this.masterData).then((_) => {
+    return this.storage.set(DatabasesEnum.Master, this.masterData).then((_) => {
       console.log("master set successfully", _);
       this.presentToast("Master updated successfully.");
       this.getAll();
@@ -250,30 +253,68 @@ export class HomePage implements AfterViewInit {
     this.masterData = this.masterForm.getRawValue();
     this.updateMaster();
   }
+  getLogId = (id) => "log" + id;
   updateLog() {
-    const id = "log" + this.getUniqueId(this.qazaForm.controls.date.value);
-    console.log(this.qazaForm.getRawValue());
+    const id = this.getLogId(
+      this.getUniqueId(this.qazaForm.controls.date.value)
+    );
+    console.log(id, this.qazaForm.getRawValue());
     let data: any = this.qazaForm.getRawValue();
     // data.timestamp = new Date();
     this.qazaForm.controls.timestamp.setValue(new Date());
-    this.appendInMasterData();
     this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
         old.push(data);
-        return this.storage.set(id, old).then((_) => {
+        this.storage.set(id, old).then((_) => {
           console.log("log updated successfully", _);
+          this.appendInMasterData();
           this.getlastXlogs(this.goBackNum);
         });
       } else {
-        return this.storage.set(id, [data]).then((_) => {
+        this.storage.set(id, [data]).then((_) => {
           console.log("log set successfully", _);
           this.getlastXlogs(this.goBackNum, new Date(), true);
+          this.setLogKeysArray(id);
         });
       }
     });
   }
-
+  loadLogKeysArray() {
+    this.storage.get(DatabasesEnum.LogKeys).then((logKeysArr: string[]) => {
+      this.logKeysArray = logKeysArr;
+      console.log("found " + this.logKeysArray.length + " logs");
+    });
+  }
+  setLogKeysArray(id: string) {
+    this.storage.get(DatabasesEnum.LogKeys).then((logKeysArr: string[]) => {
+      console.log("adding logkeys. before: ", logKeysArr);
+      this.logKeysArray = logKeysArr;
+      if (!logKeysArr) this.logKeysArray = [];
+      this.logKeysArray.push(id);
+      this.logKeysArray = Array.from(new Set(this.logKeysArray));
+      this.storage.set(DatabasesEnum.LogKeys, this.logKeysArray).then((_) => {
+        console.log(_);
+      });
+    });
+  }
+  deleteAllLogs() {
+    for (let i = 0; i < this.logKeysArray.length; i++) {
+      console.log("Deleting " + this.logKeysArray.length + " logs...");
+      this.storage.get(this.logKeysArray[i]).then((data) => {
+        this.deleteLog(this.logKeysArray[i], data);
+        if (i == this.logKeysArray.length - 1) {
+          console.log("last log");
+          this.logKeysArray = [];
+          this.storage
+            .set(DatabasesEnum.LogKeys, this.logKeysArray)
+            .then((_) => {
+              console.log(_);
+            });
+        }
+      });
+    }
+  }
   newNotif(
     seg: string,
     heading: string,
@@ -612,8 +653,8 @@ export class HomePage implements AfterViewInit {
     if (this.datesArray.length > 0) d.setDate(d.getDate() - 1);
     console.log(x, d);
     this.lastXdatesFrom(x, d).forEach((d) => {
-      this.storage.get("log" + d).then((r) => {
-        console.log(r, "log" + d);
+      this.storage.get(this.getLogId(d)).then((r) => {
+        console.log(r, this.getLogId(d));
         this.items.push(r?.filter(Boolean));
       });
     });
@@ -625,7 +666,7 @@ export class HomePage implements AfterViewInit {
       this.storage.remove(id).then((r) => {
         console.log(toBeDeleted, "-");
         this.appendInMasterData(toBeDeleted, "-");
-        this.getlastXlogs();
+        this.getlastXlogs(this.goBackNum);
       });
     else {
       console.log(value.length, " value.length is !=1");
@@ -633,7 +674,7 @@ export class HomePage implements AfterViewInit {
       this.storage.set(id, value).then((r) => {
         console.log(toBeDeleted, "-");
         this.appendInMasterData(toBeDeleted, "-");
-        this.getlastXlogs();
+        this.getlastXlogs(this.goBackNum);
       });
     }
   }
@@ -660,7 +701,7 @@ export class HomePage implements AfterViewInit {
       });
       console.log(final);
       this.appendInMasterData(final, "-");
-      this.getlastXlogs();
+      this.getlastXlogs(this.goBackNum);
     });
   }
   ngAfterViewInit() {

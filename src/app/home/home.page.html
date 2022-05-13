@@ -128,7 +128,12 @@
           </ion-button>
         </form>
       </div>
-      <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
+      <div class="logs-header">
+        <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
+        <ion-button (click)="deleteAllLogs()">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-button>
+      </div>
       <div class="card-wrapper" *ngFor="let app of items;let i= index;">
         <ion-card class="card-items" *ngIf="app && app.length>0">
           <ion-card-header>
@@ -162,7 +167,7 @@
                 <ion-button
                   slot="end"
                   fill="none"
-                  (click)="deleteOneRecord('log'+getUniqueId(app[0].date),app,j)"
+                  (click)="deleteOneRecord(getLogId(getUniqueId(app[0].date)),app,j)"
                 >
                   <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
                 </ion-button>
@@ -171,7 +176,7 @@
             <div class="hangingBtns">
               <ion-button
                 color="danger"
-                (click)="deleteConfirm('log'+getUniqueId(app[0].date),app)"
+                (click)="deleteConfirm(getLogId(getUniqueId(app[0].date)),app)"
               >
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>

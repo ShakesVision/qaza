@@ -49,3 +49,8 @@ export interface QazaItemModel {
   date?: string;
   timestamp?: Date;
 }
+
+export enum DatabasesEnum {
+  Master = "master",
+  LogKeys = "logKeys",
+}
