@@ -14,7 +14,11 @@ import {
   AdMobFreeInterstitialConfig,
   AdMobFreeRewardVideoConfig,
 } from "@ionic-native/admob-free/ngx";
-import { Master } from "../models/db-model";
+import {
+  Master,
+  MasterCompletedModel,
+  QazaItemModel,
+} from "../models/db-model";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GoogleChartInterface } from "ng2-google-charts";
 import { CounterInputComponent } from "../components/counter-input/counter-input.component";
@@ -122,6 +126,14 @@ export class HomePage implements AfterViewInit {
     this.masterForm.controls.ishaCompleted.setValue(
       this.masterData.isha.completed
     );
+    this.masterForm.controls.witrTotal.setValue(this.masterData.witr.total);
+    this.masterForm.controls.witrCompleted.setValue(
+      this.masterData.witr.completed
+    );
+    this.masterForm.controls.fastTotal.setValue(this.masterData.fast.total);
+    this.masterForm.controls.fastCompleted.setValue(
+      this.masterData.fast.completed
+    );
   }
 
   updateMaster() {
@@ -161,35 +173,83 @@ export class HomePage implements AfterViewInit {
       this.getAll();
     });
   }
-  appendInMasterData() {
+  appendInMasterData(data?: QazaItemModel, operator: string = "+") {
+    console.log(data);
+    let values: MasterCompletedModel;
+    if (data)
+      values = {
+        fajrComplete: data.fajr,
+        zuhrComplete: data.zuhr,
+        asrComplete: data.asr,
+        maghribComplete: data.maghrib,
+        ishaComplete: data.isha,
+        witrComplete: data.witr,
+        fastComplete: data.fast,
+      };
+    else
+      values = {
+        fajrComplete: this.qazaForm.controls.fajr.value,
+        zuhrComplete: this.qazaForm.controls.zuhr.value,
+        asrComplete: this.qazaForm.controls.asr.value,
+        maghribComplete: this.qazaForm.controls.maghrib.value,
+        ishaComplete: this.qazaForm.controls.isha.value,
+        witrComplete: this.qazaForm.controls.witr.value,
+        fastComplete: this.qazaForm.controls.fast.value,
+      };
+    console.log(
+      this.masterForm.controls.fajrCompleted.value,
+      values.fajrComplete
+    );
     this.masterForm.controls.fajrCompleted.setValue(
-      this.qazaForm.controls.fajr.value +
-        this.masterForm.controls.fajrCompleted.value
+      eval(
+        this.masterForm.controls.fajrCompleted.value +
+          operator +
+          values.fajrComplete
+      )
     );
     this.masterForm.controls.zuhrCompleted.setValue(
-      this.qazaForm.controls.zuhr.value +
-        this.masterForm.controls.zuhrCompleted.value
+      eval(
+        this.masterForm.controls.zuhrCompleted.value +
+          operator +
+          values.zuhrComplete
+      )
     );
     this.masterForm.controls.asrCompleted.setValue(
-      this.qazaForm.controls.asr.value +
-        this.masterForm.controls.asrCompleted.value
+      eval(
+        this.masterForm.controls.asrCompleted.value +
+          operator +
+          values.asrComplete
+      )
     );
     this.masterForm.controls.maghribCompleted.setValue(
-      this.qazaForm.controls.maghrib.value +
-        this.masterForm.controls.maghribCompleted.value
+      eval(
+        this.masterForm.controls.maghribCompleted.value +
+          operator +
+          values.maghribComplete
+      )
     );
     this.masterForm.controls.ishaCompleted.setValue(
-      this.qazaForm.controls.isha.value +
-        this.masterForm.controls.ishaCompleted.value
+      eval(
+        this.masterForm.controls.ishaCompleted.value +
+          operator +
+          values.ishaComplete
+      )
     );
     this.masterForm.controls.witrCompleted.setValue(
-      this.qazaForm.controls.witr.value +
-        this.masterForm.controls.witrCompleted.value
+      eval(
+        this.masterForm.controls.witrCompleted.value +
+          operator +
+          values.witrComplete
+      )
     );
     this.masterForm.controls.fastCompleted.setValue(
-      this.qazaForm.controls.fast.value +
-        this.masterForm.controls.fastCompleted.value
+      eval(
+        this.masterForm.controls.fastCompleted.value +
+          operator +
+          values.fastComplete
+      )
     );
+    this.masterData = this.masterForm.getRawValue();
     this.updateMaster();
   }
   updateLog() {
@@ -562,12 +622,19 @@ export class HomePage implements AfterViewInit {
   }
   deleteOneRecord(id, value, index) {
     console.log("deleting " + id, value);
+    const toBeDeleted = value[index];
     if (value.length === 1)
-      this.storage.remove(id).then((r) => this.getlastXlogs());
+      this.storage.remove(id).then((r) => {
+        console.log(toBeDeleted, "-");
+        this.appendInMasterData(toBeDeleted, "-");
+        this.getlastXlogs();
+      });
     else {
       console.log(value.length, " value.length is !=1");
       value.splice(index, 1);
       this.storage.set(id, value).then((r) => {
+        console.log(toBeDeleted, "-");
+        this.appendInMasterData(toBeDeleted, "-");
         this.getlastXlogs();
       });
     }

@@ -28,3 +28,24 @@ export interface Master {
     completed: number;
   };
 }
+export interface MasterCompletedModel {
+  fajrComplete: number;
+  zuhrComplete: number;
+  asrComplete: number;
+  maghribComplete: number;
+  ishaComplete: number;
+  witrComplete: number;
+  fastComplete: number;
+}
+
+export interface QazaItemModel {
+  fajr: number;
+  zuhr: number;
+  asr: number;
+  maghrib: number;
+  isha: number;
+  witr: number;
+  fast: number;
+  date: string;
+  timestamp: Date;
+}
