@@ -46,6 +46,6 @@ export interface QazaItemModel {
   isha: number;
   witr: number;
   fast: number;
-  date: string;
-  timestamp: Date;
+  date?: string;
+  timestamp?: Date;
 }

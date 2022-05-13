@@ -60,6 +60,7 @@ export class HomePage implements AfterViewInit {
   masterData: Master;
   masterDataPresent: boolean;
   datesArray: Date[] = [];
+  goBackNum: number = 10;
   qazaForm = new FormGroup({
     date: new FormControl(""),
     fajr: new FormControl(0),
@@ -174,7 +175,11 @@ export class HomePage implements AfterViewInit {
     });
   }
   appendInMasterData(data?: QazaItemModel, operator: string = "+") {
-    console.log(data);
+    console.log(data, operator);
+    let operators = {
+      "+": (a, b) => a + b,
+      "-": (a, b) => a - b,
+    };
     let values: MasterCompletedModel;
     if (data)
       values = {
@@ -201,52 +206,45 @@ export class HomePage implements AfterViewInit {
       values.fajrComplete
     );
     this.masterForm.controls.fajrCompleted.setValue(
-      eval(
-        this.masterForm.controls.fajrCompleted.value +
-          operator +
-          values.fajrComplete
+      operators[operator](
+        this.masterForm.controls.fajrCompleted.value,
+        values.fajrComplete
       )
     );
     this.masterForm.controls.zuhrCompleted.setValue(
-      eval(
-        this.masterForm.controls.zuhrCompleted.value +
-          operator +
-          values.zuhrComplete
+      operators[operator](
+        this.masterForm.controls.zuhrCompleted.value,
+        values.zuhrComplete
       )
     );
     this.masterForm.controls.asrCompleted.setValue(
-      eval(
-        this.masterForm.controls.asrCompleted.value +
-          operator +
-          values.asrComplete
+      operators[operator](
+        this.masterForm.controls.asrCompleted.value,
+        values.asrComplete
       )
     );
     this.masterForm.controls.maghribCompleted.setValue(
-      eval(
-        this.masterForm.controls.maghribCompleted.value +
-          operator +
-          values.maghribComplete
+      operators[operator](
+        this.masterForm.controls.maghribCompleted.value,
+        values.maghribComplete
       )
     );
     this.masterForm.controls.ishaCompleted.setValue(
-      eval(
-        this.masterForm.controls.ishaCompleted.value +
-          operator +
-          values.ishaComplete
+      operators[operator](
+        this.masterForm.controls.ishaCompleted.value,
+        values.ishaComplete
       )
     );
     this.masterForm.controls.witrCompleted.setValue(
-      eval(
-        this.masterForm.controls.witrCompleted.value +
-          operator +
-          values.witrComplete
+      operators[operator](
+        this.masterForm.controls.witrCompleted.value,
+        values.witrComplete
       )
     );
     this.masterForm.controls.fastCompleted.setValue(
-      eval(
-        this.masterForm.controls.fastCompleted.value +
-          operator +
-          values.fastComplete
+      operators[operator](
+        this.masterForm.controls.fastCompleted.value,
+        values.fastComplete
       )
     );
     this.masterData = this.masterForm.getRawValue();
@@ -265,12 +263,12 @@ export class HomePage implements AfterViewInit {
         old.push(data);
         return this.storage.set(id, old).then((_) => {
           console.log("log updated successfully", _);
-          this.getlastXlogs();
+          this.getlastXlogs(this.goBackNum);
         });
       } else {
         return this.storage.set(id, [data]).then((_) => {
           console.log("log set successfully", _);
-          this.getlastXlogs(10, new Date(), true);
+          this.getlastXlogs(this.goBackNum, new Date(), true);
         });
       }
     });
@@ -468,7 +466,7 @@ export class HomePage implements AfterViewInit {
     });
     toast.present();
   }
-  async deleteConfirm(id) {
+  async deleteConfirm(id, data) {
     const alert = await this.alertController.create({
       header: "Confirm!",
       message: `Do you really want to delete the entry for <strong><em>${id}</em></strong> completely?`,
@@ -485,7 +483,7 @@ export class HomePage implements AfterViewInit {
           cssClass: "deleteConfirmBtn",
           handler: () => {
             // this.delete(i);
-            this.deleteLog(id);
+            this.deleteLog(id, data);
           },
         },
       ],
@@ -639,8 +637,31 @@ export class HomePage implements AfterViewInit {
       });
     }
   }
-  deleteLog(id) {
-    this.storage.remove(id).then((r) => this.getlastXlogs());
+  deleteLog(id, data: QazaItemModel[]) {
+    this.storage.remove(id).then((r) => {
+      console.log(data);
+      let final: QazaItemModel = {
+        fajr: 0,
+        zuhr: 0,
+        asr: 0,
+        maghrib: 0,
+        isha: 0,
+        witr: 0,
+        fast: 0,
+      };
+      data.forEach((item) => {
+        final.fajr += item.fajr;
+        final.zuhr += item.zuhr;
+        final.asr += item.asr;
+        final.maghrib += item.maghrib;
+        final.isha += item.isha;
+        final.witr += item.witr;
+        final.fast += item.fast;
+      });
+      console.log(final);
+      this.appendInMasterData(final, "-");
+      this.getlastXlogs();
+    });
   }
   ngAfterViewInit() {
     this.qazaForm.controls.date.setValue(new Date().toISOString());

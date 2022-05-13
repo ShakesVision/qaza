@@ -171,7 +171,7 @@
             <div class="hangingBtns">
               <ion-button
                 color="danger"
-                (click)="deleteConfirm('log'+getUniqueId(app[0].date))"
+                (click)="deleteConfirm('log'+getUniqueId(app[0].date),app)"
               >
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>
@@ -207,9 +207,14 @@
             </em>
           </ion-label>
         </div>
-        <ion-input type="number" value="10" #goBackX></ion-input>
+        <ion-input
+          type="number"
+          value="10"
+          #goBackX
+          [(ngModel)]="goBackNum"
+        ></ion-input>
         <ion-button
-          (click)="getlastXlogs(+goBackX.value,datesArray[datesArray.length-1],false)"
+          (click)="getlastXlogs(goBackNum,datesArray[datesArray.length-1],false)"
         >
           <ion-icon slot="start" name="add"></ion-icon>
           More days
