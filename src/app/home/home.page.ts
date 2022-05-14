@@ -108,6 +108,7 @@ export class HomePage implements AfterViewInit {
   }
 
   populateMasterForm() {
+    console.log("Populating master form");
     this.masterForm.controls.fajrTotal.setValue(this.masterData.fajr.total);
     this.masterForm.controls.fajrCompleted.setValue(
       this.masterData.fajr.completed
@@ -259,9 +260,9 @@ export class HomePage implements AfterViewInit {
       this.getUniqueId(this.qazaForm.controls.date.value)
     );
     console.log(id, this.qazaForm.getRawValue());
-    let data: any = this.qazaForm.getRawValue();
     // data.timestamp = new Date();
     this.qazaForm.controls.timestamp.setValue(new Date());
+    let data: any = this.qazaForm.getRawValue();
     this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
@@ -274,6 +275,7 @@ export class HomePage implements AfterViewInit {
       } else {
         this.storage.set(id, [data]).then((_) => {
           console.log("log set successfully", _);
+          this.appendInMasterData();
           this.getlastXlogs(this.goBackNum, new Date(), true);
           this.setLogKeysArray(id);
         });
@@ -405,7 +407,7 @@ export class HomePage implements AfterViewInit {
     return this.storage.set("entries", val);
   }
   getAll() {
-    this.storage.get("master").then((entries) => {
+    this.storage.get(DatabasesEnum.Master).then((entries) => {
       console.log(entries);
       if (entries) {
         this.masterDataPresent = true;
