@@ -6,7 +6,6 @@ import { HomePage } from "./home.page";
 
 import { HomePageRoutingModule } from "./home-routing.module";
 import { Ng2GoogleChartsModule } from "ng2-google-charts";
-import { CounterInputComponent } from "../components/counter-input/counter-input.component";
 
 @NgModule({
   imports: [
@@ -17,6 +16,6 @@ import { CounterInputComponent } from "../components/counter-input/counter-input
     ReactiveFormsModule,
     Ng2GoogleChartsModule,
   ],
-  declarations: [HomePage, CounterInputComponent],
+  declarations: [HomePage],
 })
 export class HomePageModule {}

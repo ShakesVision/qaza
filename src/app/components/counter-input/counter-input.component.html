@@ -1,9 +1,9 @@
 <div class="counter-wrapper">
   <button class="btn btn-minus" (click)="updateCounter(-1)">–</button>
   <input
+    #countInput
     type="number"
     placeholder="0"
-    [(ngModel)]="count"
     (input)="inputChanged($event)"
     [formControl]="control"
   />

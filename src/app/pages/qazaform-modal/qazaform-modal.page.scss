@@ -1,0 +1,20 @@
+.counter-labels-inputs-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  .counter-label-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 15px 5px;
+    .counter-label-arabic {
+      font-size: x-small;
+    }
+    ion-label {
+      font-size: x-large;
+      margin-bottom: 10px;
+    }
+  }
+}
+form .arabic {
+  font-size: x-small;
+}

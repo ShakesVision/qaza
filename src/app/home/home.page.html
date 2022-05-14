@@ -14,6 +14,12 @@
         </ion-button>
         <ion-label>About</ion-label>
       </div>
+      <div class="topBtns">
+        <ion-button (click)="openQazaModal()">
+          <ion-icon name="add"></ion-icon>
+        </ion-button>
+        <ion-label>Form</ion-label>
+      </div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -50,87 +56,9 @@
         </ion-refresher-content>
       </ion-refresher>
 
-      <div class="inputElements ion-text-center">
-        <form [formGroup]="qazaForm" action="submit">
-          <ion-item>
-            <ion-label position="floating"
-              >Date <span class="arabic">تاریخ</span></ion-label
-            >
-            <!-- <ion-input type="date" formControlName="date" required></ion-input> -->
-            <ion-datetime
-              presentation="date"
-              type="date"
-              formControlName="date"
-              required
-            ></ion-datetime>
-          </ion-item>
-          <div class="counter-labels-inputs-wrapper">
-            <div class="counter-label-input">
-              <div class="counter-label-arabic arabic">فجر</div>
-              <ion-label>F</ion-label>
-              <counter-input
-                #fajr
-                (countChange)="updateCountInFormontrol($event,'fajr')"
-                [control]="qazaForm.controls.fajr"
-              ></counter-input>
-            </div>
-            <div class="counter-label-input">
-              <div class="counter-label-arabic arabic">ظہر</div>
-              <ion-label>Z</ion-label>
-              <counter-input
-                (countChange)="updateCountInFormontrol($event,'zuhr')"
-                [control]="qazaForm.controls.zuhr"
-              ></counter-input>
-            </div>
-            <div class="counter-label-input">
-              <div class="counter-label-arabic arabic">عصر</div>
-              <ion-label>A</ion-label>
-              <counter-input
-                (countChange)="updateCountInFormontrol($event,'asr')"
-                [control]="qazaForm.controls.asr"
-              ></counter-input>
-            </div>
-            <div class="counter-label-input">
-              <div class="counter-label-arabic arabic">مغرب</div>
-              <ion-label>M</ion-label>
-              <counter-input
-                (countChange)="updateCountInFormontrol($event,'maghrib')"
-                [control]="qazaForm.controls.maghrib"
-              ></counter-input>
-            </div>
-            <div class="counter-label-input">
-              <div class="counter-label-arabic arabic">عشاء</div>
-              <ion-label>I</ion-label>
-              <counter-input
-                (countChange)="updateCountInFormontrol($event,'isha')"
-                [control]="qazaForm.controls.isha"
-              ></counter-input>
-            </div>
-            <div class="counter-label-input">
-              <div class="counter-label-arabic arabic">وتر</div>
-              <ion-label>W</ion-label>
-              <counter-input
-                (countChange)="updateCountInFormontrol($event,'witr')"
-                [control]="qazaForm.controls.witr"
-              ></counter-input>
-            </div>
-          </div>
-          <ion-item>
-            <ion-label>Fast <span class="arabic">صوم</span></ion-label>
-            <counter-input
-              slot="end"
-              (countChange)="updateCountInFormontrol($event,'fast')"
-              [control]="qazaForm.controls.fast"
-            ></counter-input>
-          </ion-item>
-          <ion-button (click)="updateLog()">
-            <ion-icon slot="start" name="add"></ion-icon> Add New
-          </ion-button>
-        </form>
-      </div>
       <div class="logs-header">
         <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
-        <ion-button (click)="deleteAllLogs()">
+        <ion-button (click)="deleteAllLogs()" fill="clear" color="danger">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-button>
       </div>

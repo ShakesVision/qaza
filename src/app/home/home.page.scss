@@ -78,23 +78,7 @@ ion-card.card-items {
 .chart-wrapper {
   // overflow-x: scroll;
 }
-.counter-labels-inputs-wrapper {
-  display: flex;
-  justify-content: space-evenly;
-  .counter-label-input {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin: 15px 5px;
-    .counter-label-arabic {
-      font-size: x-small;
-    }
-    ion-label {
-      font-size: x-large;
-      margin-bottom: 10px;
-    }
-  }
-}
+
 ion-grid ion-col {
   text-align: center;
   .stats-wrap {
@@ -105,9 +89,7 @@ ion-grid ion-col {
     color: var(--ion-color-primary);
   }
 }
-form .arabic {
-  font-size: x-small;
-}
+
 .logs-header {
   display: flex;
   justify-content: space-between;

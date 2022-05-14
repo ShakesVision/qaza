@@ -4,6 +4,7 @@ import {
   AlertController,
   IonContent,
   IonTextarea,
+  ModalController,
   Platform,
 } from "@ionic/angular";
 import { ToastController } from "@ionic/angular";
@@ -23,6 +24,8 @@ import {
 import { FormControl, FormGroup } from "@angular/forms";
 import { GoogleChartInterface } from "ng2-google-charts";
 import { CounterInputComponent } from "../components/counter-input/counter-input.component";
+import { QazaformModalComponent } from "../components/qazaform-modal/qazaform-modal.component";
+import { QazaformModalPage } from "../pages/qazaform-modal/qazaform-modal.page";
 
 @Component({
   selector: "app-home",
@@ -38,7 +41,8 @@ export class HomePage implements AfterViewInit {
     private admobFree: AdMobFree,
     public alertController: AlertController,
     private storage: Storage,
-    public toastController: ToastController
+    public toastController: ToastController,
+    private modalController: ModalController
   ) {}
 
   type: string = "default";
@@ -709,29 +713,18 @@ export class HomePage implements AfterViewInit {
   ngAfterViewInit() {
     this.qazaForm.controls.date.setValue(new Date().toISOString());
   }
-  updateCountInFormontrol(v: number, formControlName: string) {
-    console.log("count=> " + v);
-    this.qazaForm.controls[formControlName].setValue(v);
-  }
-  populateInputFieldsForUpdate(r) {
-    console.log(r);
-    //not working, probably because timestamp formcontrol is not prresent in the ui.
-    //also maybe because formControl isn't really targetted from home, but from counter-input
-    this.qazaForm.patchValue(r);
-    this.scrollToTop();
 
-    // let controlNames = [
-    //   "date",
-    //   "fajr",
-    //   "zuhr",
-    //   "asr",
-    //   "maghrib",
-    //   "isha",
-    //   "witr",
-    //   "fast",
-    // ];
-    // controlNames.forEach((control) => {
-    //   this.qazaForm.controls[control].setValue(r[control]);
-    // });
+  async openQazaModal() {
+    // const formValue = this.qazaForm.getRawValue();
+    // console.log(formValue);
+    const m = await this.modalController.create({
+      component: QazaformModalPage,
+      // componentProps: { formValue },
+      swipeToClose: true,
+      cssClass: "qaza-modal",
+    });
+    // const { data } = await m.onDidDismiss();
+    // console.log(data);
+    return await m.present();
   }
 }

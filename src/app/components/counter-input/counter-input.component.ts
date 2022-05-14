@@ -1,4 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+  ViewChild,
+} from "@angular/core";
 import { AbstractControl, FormControl } from "@angular/forms";
 
 @Component({
@@ -9,20 +18,22 @@ import { AbstractControl, FormControl } from "@angular/forms";
 export class CounterInputComponent implements OnInit {
   @Output() countChange = new EventEmitter<any>();
   @Input() control: AbstractControl = new FormControl();
+  @ViewChild("countInput", { static: true }) countInput: ElementRef;
   count: number = 0;
   constructor() {}
 
   ngOnInit() {}
 
   updateCounter(v: number) {
-    this.count += v;
-    this.emitCountValue();
+    let value = parseInt(this.countInput.nativeElement.value);
+    value += v;
+    this.emitCountValue(value);
   }
   inputChanged(e) {
-    console.log(e.target.value, this.count);
-    this.emitCountValue();
+    this.emitCountValue(e.target.value);
   }
-  emitCountValue() {
-    this.countChange.emit(this.count);
+  emitCountValue(v: number) {
+    console.log("emitting " + v);
+    this.countChange.emit(v);
   }
 }
