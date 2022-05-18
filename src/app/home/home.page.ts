@@ -24,7 +24,6 @@ import {
 import { FormControl, FormGroup } from "@angular/forms";
 import { GoogleChartInterface } from "ng2-google-charts";
 import { CounterInputComponent } from "../components/counter-input/counter-input.component";
-import { QazaformModalComponent } from "../components/qazaform-modal/qazaform-modal.component";
 import { QazaformModalPage } from "../pages/qazaform-modal/qazaform-modal.page";
 
 @Component({
@@ -259,27 +258,25 @@ export class HomePage implements AfterViewInit {
     this.updateMaster();
   }
   getLogId = (id) => "log" + id;
-  updateLog() {
-    const id = this.getLogId(
-      this.getUniqueId(this.qazaForm.controls.date.value)
-    );
-    console.log(id, this.qazaForm.getRawValue());
-    // data.timestamp = new Date();
-    this.qazaForm.controls.timestamp.setValue(new Date());
-    let data: any = this.qazaForm.getRawValue();
+  updateLog(data: QazaItemModel) {
+    const id = this.getLogId(this.getUniqueId(data.date));
+    // console.log(id, this.qazaForm.getRawValue());
+    // // data.timestamp = new Date();
+    // this.qazaForm.controls.timestamp.setValue(new Date());
+    // let data: any = this.qazaForm.getRawValue();
     this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
         old.push(data);
         this.storage.set(id, old).then((_) => {
           console.log("log updated successfully", _);
-          this.appendInMasterData();
+          this.appendInMasterData(data);
           this.getlastXlogs(this.goBackNum);
         });
       } else {
         this.storage.set(id, [data]).then((_) => {
           console.log("log set successfully", _);
-          this.appendInMasterData();
+          this.appendInMasterData(data);
           this.getlastXlogs(this.goBackNum, new Date(), true);
           this.setLogKeysArray(id);
         });
@@ -723,8 +720,8 @@ export class HomePage implements AfterViewInit {
       swipeToClose: true,
       cssClass: "qaza-modal",
     });
-    // const { data } = await m.onDidDismiss();
-    // console.log(data);
-    return await m.present();
+    await m.present();
+    const { data } = await m.onDidDismiss();
+    this.updateLog(data);
   }
 }

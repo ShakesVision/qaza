@@ -10,7 +10,7 @@ import { ModalController } from "@ionic/angular";
 export class QazaformModalPage implements OnInit {
   @Input() formValue;
   qazaForm = new FormGroup({
-    date: new FormControl(""),
+    date: new FormControl(new Date().toISOString()),
     fajr: new FormControl(0),
     zuhr: new FormControl(0),
     asr: new FormControl(0),
