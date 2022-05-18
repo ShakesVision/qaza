@@ -93,4 +93,11 @@ ion-grid ion-col {
 .logs-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.top-add-btn {
+  border: 1px solid var(--ion-color-primary);
+  margin: 2rem 0;
+  padding: 2rem;
 }

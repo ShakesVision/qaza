@@ -55,7 +55,12 @@
         >
         </ion-refresher-content>
       </ion-refresher>
-
+      <div class="top-add-btn ion-text-center">
+        <ion-button (click)="openQazaModal()">
+          <ion-icon slot="start" name="add"></ion-icon>
+          Add a record
+        </ion-button>
+      </div>
       <div class="logs-header">
         <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
         <ion-button (click)="deleteAllLogs()" fill="clear" color="danger">
