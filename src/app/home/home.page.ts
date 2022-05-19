@@ -259,6 +259,7 @@ export class HomePage implements AfterViewInit {
   }
   getLogId = (id) => "log" + id;
   updateLog(data: QazaItemModel) {
+    console.log(data);
     const id = this.getLogId(this.getUniqueId(data.date));
     // console.log(id, this.qazaForm.getRawValue());
     // // data.timestamp = new Date();
@@ -300,6 +301,61 @@ export class HomePage implements AfterViewInit {
         console.log(_);
       });
     });
+  }
+  async importPrompt() {
+    const alert = await this.alertController.create({
+      cssClass: "en",
+      header: "Import!",
+      subHeader: "Paste the text file to import",
+      inputs: [
+        {
+          name: "data",
+          id: "data",
+          type: "textarea",
+          placeholder: "Text to import...متن برائے درامد",
+        },
+      ],
+      buttons: [
+        {
+          text: "Cancel",
+          role: "cancel",
+          cssClass: "secondary",
+          handler: () => {
+            console.log("Confirm Cancel");
+          },
+        },
+        {
+          text: "Import",
+          handler: (d) => {
+            this.importLogs(JSON.parse(d.data));
+          },
+        },
+      ],
+    });
+
+    await alert.present();
+  }
+  importLogs(data: QazaItemModel[][]) {
+    console.log(data);
+    for (let i = 0; i < data.length; i++) {
+      // console.log(data[i]);
+      for (let j = 0; j < data[i].length; j++) {
+        console.log(data[i][j]);
+        this.updateLog(data[i][j]);
+      }
+    }
+  }
+  exportAllLogs() {
+    let arrayToExport: QazaItemModel[] = [];
+    for (let i = 0; i < this.logKeysArray.length; i++) {
+      console.log("Exporting " + this.logKeysArray.length + " logs...");
+      this.storage.get(this.logKeysArray[i]).then((data) => {
+        arrayToExport.push(data);
+        if (i == this.logKeysArray.length - 1) {
+          this.exportToJson(arrayToExport);
+        }
+      });
+    }
   }
   deleteAllLogs() {
     for (let i = 0; i < this.logKeysArray.length; i++) {

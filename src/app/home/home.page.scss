@@ -91,13 +91,23 @@ ion-grid ion-col {
 }
 
 .logs-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
+  ion-button {
+    margin: 0;
+    --padding-end: 0;
+    --padding-start: 0;
+  }
 }
-
-.top-add-btn {
-  border: 1px solid var(--ion-color-primary);
-  margin: 2rem 0;
-  padding: 2rem;
+.top-add-actions-btns {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  .top-add-btn {
+    border: 1px solid var(--ion-color-primary);
+    margin: 2rem 0;
+    padding: 1rem;
+    cursor: pointer;
+  }
 }

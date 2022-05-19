@@ -14,12 +14,6 @@
         </ion-button>
         <ion-label>About</ion-label>
       </div>
-      <div class="topBtns">
-        <ion-button (click)="openQazaModal()">
-          <ion-icon name="add"></ion-icon>
-        </ion-button>
-        <ion-label>Form</ion-label>
-      </div>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -55,17 +49,36 @@
         >
         </ion-refresher-content>
       </ion-refresher>
-      <div class="top-add-btn ion-text-center">
-        <ion-button (click)="openQazaModal()">
-          <ion-icon slot="start" name="add"></ion-icon>
-          Add a record
-        </ion-button>
+      <div class="top-add-actions-btns">
+        <div class="top-add-btn ion-text-center" (click)="openQazaModal()">
+          <ion-button fill="clear">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Add a record
+          </ion-button>
+        </div>
+        <div class="top-add-btn ion-text-center" (click)="importPrompt()">
+          <ion-button fill="clear">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Import
+          </ion-button>
+        </div>
       </div>
       <div class="logs-header">
-        <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
-        <ion-button (click)="deleteAllLogs()" fill="clear" color="danger">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-button>
+        <ion-item lines="none" class="ion-no-margin">
+          <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
+          <ion-buttons slot="end">
+            <ion-button (click)="deleteAllLogs()" fill="clear" color="danger">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+            <ion-button
+              (click)="exportAllLogs()"
+              fill="clear"
+              color="secondary"
+            >
+              <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
       </div>
       <div class="card-wrapper" *ngFor="let app of items;let i= index;">
         <ion-card class="card-items" *ngIf="app && app.length>0">
@@ -153,9 +166,12 @@
         ></ion-input>
         <ion-button
           (click)="getlastXlogs(goBackNum,datesArray[datesArray.length-1],false)"
+          fill="clear"
         >
-          <ion-icon slot="start" name="add"></ion-icon>
-          More days
+          <ion-icon
+            slot="icon-only"
+            name="chevron-down-circle-outline"
+          ></ion-icon>
         </ion-button>
       </div>
     </div>
