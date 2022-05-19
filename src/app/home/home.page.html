@@ -50,31 +50,41 @@
         </ion-refresher-content>
       </ion-refresher>
       <div class="top-add-actions-btns">
-        <div class="top-add-btn ion-text-center" (click)="openQazaModal()">
-          <ion-button fill="clear">
-            <ion-icon slot="start" name="add"></ion-icon>
-            Add a record
-          </ion-button>
-        </div>
-        <div class="top-add-btn ion-text-center" (click)="importPrompt()">
-          <ion-button fill="clear">
-            <ion-icon slot="start" name="add"></ion-icon>
-            Import
-          </ion-button>
-        </div>
+        <ion-grid fixed>
+          <ion-row>
+            <ion-col size="6">
+              <div
+                class="top-add-btn ion-text-center"
+                (click)="openQazaModal()"
+              >
+                <ion-button fill="clear">
+                  <ion-icon slot="start" name="add"></ion-icon>
+                  Add
+                </ion-button>
+              </div>
+            </ion-col>
+            <ion-col size="6">
+              <div class="top-add-btn ion-text-center" (click)="importPrompt()">
+                <ion-button fill="clear">
+                  <ion-icon slot="start" name="log-in-outline"></ion-icon>
+                  Import
+                </ion-button>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </div>
       <div class="logs-header">
         <ion-item lines="none" class="ion-no-margin">
-          <h2 style="color: var(--ion-color-primary)">Daily Logs</h2>
+          <h2 style="color: var(--ion-color-primary)">
+            Daily Logs
+            <span *ngIf="logKeysArray"> ({{logKeysArray?.length}}) </span>
+          </h2>
           <ion-buttons slot="end">
             <ion-button (click)="deleteAllLogs()" fill="clear" color="danger">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
-            <ion-button
-              (click)="exportAllLogs()"
-              fill="clear"
-              color="secondary"
-            >
+            <ion-button (click)="exportAllLogs()" fill="clear" color="primary">
               <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
             </ion-button>
           </ion-buttons>
@@ -126,15 +136,6 @@
               >
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>
-              <ion-button (click)="update(app.salah,app.count)">
-                <ion-icon name="pencil" slot="icon-only"></ion-icon>
-              </ion-button>
-              <ion-button color="success" (click)="saveItem(i)">
-                <ion-icon
-                  name="checkmark-done-outline"
-                  slot="icon-only"
-                ></ion-icon>
-              </ion-button>
             </div>
             <div class="codenbtn">
               <!-- d966d91c-664e-47e8-ba65-314d82fe1196 -->
@@ -149,7 +150,10 @@
           </ion-card-content>
         </ion-card>
       </div>
-      <div class="load-more ion-text-center">
+      <div
+        class="load-more ion-text-center"
+        *ngIf="logKeysArray?.length>0;else nothingHereTemplate"
+      >
         <div>
           <ion-label color="medium">
             <em
@@ -174,6 +178,11 @@
           ></ion-icon>
         </ion-button>
       </div>
+      <ng-template #nothingHereTemplate>
+        <div class="ion-text-center" style="margin-top: 35%">
+          <ion-label color="medium"> <em>Nothing here :(</em> </ion-label>
+        </div>
+      </ng-template>
     </div>
 
     <div *ngSwitchCase="'new'">
@@ -388,13 +397,6 @@
           </ion-button>
         </div>
       </ion-card>
-      <div
-        *ngIf="!masterDataPresent"
-        class="ion-text-center"
-        style="margin-top: 35%"
-      >
-        <ion-label color="medium"> <em>Nothing here :(</em> </ion-label>
-      </div>
     </div>
   </div>
 </ion-content>
