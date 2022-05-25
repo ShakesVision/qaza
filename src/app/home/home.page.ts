@@ -182,7 +182,7 @@ export class HomePage implements AfterViewInit {
     });
   }
   appendInMasterData(data?: QazaItemModel, operator: string = "+") {
-    console.log(data, operator);
+    console.warn(data, operator);
     let operators = {
       "+": (a, b) => a + b,
       "-": (a, b) => a - b,
@@ -208,10 +208,6 @@ export class HomePage implements AfterViewInit {
         witrComplete: this.qazaForm.controls.witr.value,
         fastComplete: this.qazaForm.controls.fast.value,
       };
-    console.log(
-      this.masterForm.controls.fajrCompleted.value,
-      values.fajrComplete
-    );
     this.masterForm.controls.fajrCompleted.setValue(
       operators[operator](
         this.masterForm.controls.fajrCompleted.value,
@@ -280,14 +276,14 @@ export class HomePage implements AfterViewInit {
       }
     });
   }
-  updateLog(data: QazaItemModel) {
+  updateLog(data: QazaItemModel): Promise<any> {
     console.log(data);
     const id = this.getLogId(this.getUniqueId(data.date));
     // console.log(id, this.qazaForm.getRawValue());
     // // data.timestamp = new Date();
     // this.qazaForm.controls.timestamp.setValue(new Date());
     // let data: any = this.qazaForm.getRawValue();
-    this.storage.get(id).then((old: any) => {
+    return this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
         old.push(data);
@@ -357,15 +353,14 @@ export class HomePage implements AfterViewInit {
 
     await alert.present();
   }
-  importLogs(data: QazaItemModel[][]) {
+  async importLogs(data: QazaItemModel[][]) {
     console.log(data);
     for (let i = 0; i < data.length; i++) {
-      console.log(data[i]);
-      this.updateMultipleLogs(data[i]);
-      // for (let j = 0; j < data[i].length; j++) {
-      //   console.log(data[i][j]);
-      //   this.updateLog(data[i][j]);
-      // }
+      // await this.updateMultipleLogs(data[i]);
+      for (let j = 0; j < data[i].length; j++) {
+        console.log(data[i][j]);
+        await this.updateLog(data[i][j]);
+      }
     }
   }
   exportAllLogs() {
@@ -762,6 +757,7 @@ export class HomePage implements AfterViewInit {
   }
   deleteLog(id, data: QazaItemModel[]) {
     this.storage.remove(id).then((r) => {
+      this.logKeysArray = this.logKeysArray.filter((a) => a !== id);
       console.log(data);
       let final: QazaItemModel = {
         fajr: 0,
@@ -772,7 +768,7 @@ export class HomePage implements AfterViewInit {
         witr: 0,
         fast: 0,
       };
-      data.forEach((item) => {
+      data?.forEach((item) => {
         final.fajr += item.fajr;
         final.zuhr += item.zuhr;
         final.asr += item.asr;
