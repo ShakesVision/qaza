@@ -103,6 +103,7 @@
           </ion-card-header>
           <ion-card-content>
             <div *ngFor="let r of app;let j= index;">
+              <span class="index"> {{j+1}} </span>
               Fajr:{{r.fajr}}, Zuhr:{{r.zuhr}}, Asr:{{r.asr}},
               Maghrib:{{r.maghrib}}, Isha:{{r.isha}}, Witr:{{r.witr}},
               Fast:{{r.fast}}

@@ -187,8 +187,6 @@ export class HomePage implements AfterViewInit {
     });
   }
   appendInMasterData(data?: QazaItemModel, operator: string = "+") {
-    console.log(";;;;;;;", data);
-    console.warn(data, operator);
     let operators = {
       "+": (a, b) => a + b,
       "-": (a, b) => a - b,
@@ -259,6 +257,41 @@ export class HomePage implements AfterViewInit {
     this.masterData = this.masterForm.getRawValue();
     return this.updateMaster();
   }
+  collectMaster(data: QazaItemModel[]) {
+    let val: QazaItemModel = {
+      fajr: 0,
+      zuhr: 0,
+      asr: 0,
+      maghrib: 0,
+      isha: 0,
+      witr: 0,
+      fast: 0,
+      // fajrComplete: this.masterForm.controls.fajrComplete.value,
+      // zuhrComplete: this.masterForm.controls.zuhrComplete.value,
+      // asrComplete: this.masterForm.controls.asrComplete.value,
+      // maghribComplete: this.masterForm.controls.maghribComplete.value,
+      // ishaComplete: this.masterForm.controls.ishaComplete.value,
+      // witrComplete: this.masterForm.controls.witrComplete.value,
+      // fastComplete: this.masterForm.controls.fastComplete.value,
+    };
+    data.forEach((v) => {
+      val.fajr += v.fajr;
+      val.zuhr += v.zuhr;
+      val.asr += v.asr;
+      val.maghrib += v.maghrib;
+      val.isha += v.isha;
+      val.witr += v.witr;
+      val.fast += v.fast;
+    });
+    this.masterForm.controls.fajrCompleted.setValue(val.fajr);
+    this.masterForm.controls.zuhrCompleted.setValue(val.zuhr);
+    this.masterForm.controls.asrCompleted.setValue(val.asr);
+    this.masterForm.controls.maghribCompleted.setValue(val.maghrib);
+    this.masterForm.controls.ishaCompleted.setValue(val.isha);
+    this.masterForm.controls.witrCompleted.setValue(val.witr);
+    this.masterForm.controls.fastCompleted.setValue(val.fast);
+    this.updateMaster();
+  }
   getLogId = (id) => "log" + id;
   updateMultipleLogs(data: QazaItemModel[]) {
     const id = this.getLogId(this.getUniqueId(data[0].date));
@@ -280,8 +313,7 @@ export class HomePage implements AfterViewInit {
         this.storage.set(id, data).then((d) => {
           console.log("log set successfully", d);
           d.forEach(async (r) => await this.appendInMasterData(r));
-          this.getlastXlogs(this.goBackNum, new Date(), true);
-          this.setLogKeysArray(id);
+          this.refresh();
         });
       }
     });
@@ -296,13 +328,21 @@ export class HomePage implements AfterViewInit {
     return this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
-        if (toUpdate) old[index] = data;
-        else old.push(data);
-        this.storage.set(id, old).then(async (_) => {
-          console.log("log updated successfully", _);
-          await this.appendInMasterData(data);
-          this.getlastXlogs(this.goBackNum);
-        });
+        if (toUpdate) {
+          old[index] = data;
+          this.storage.set(id, old).then(async (_) => {
+            // old.forEach(async (r) => await this.appendInMasterData(r));
+            await this.collectMaster(old);
+            this.refresh();
+          });
+        } else {
+          old.push(data);
+          this.storage.set(id, old).then(async (_) => {
+            console.log("log updated successfully", _);
+            await this.appendInMasterData(data);
+            this.getlastXlogs(this.goBackNum);
+          });
+        }
       } else {
         this.storage.set(id, [data]).then(async (_) => {
           console.log("log set successfully", _);

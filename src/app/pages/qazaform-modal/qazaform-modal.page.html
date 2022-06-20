@@ -84,6 +84,7 @@
         ></counter-input>
       </ion-item>
       <ion-button (click)="passData()">
+        <!-- [disabled]="!qazaForm.dirty && formValue" -->
         <span *ngIf="!formValue;else updateTemplate">
           <ion-icon slot="start" name="add"></ion-icon> Add New
         </span>
