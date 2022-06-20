@@ -23,18 +23,22 @@ export class QazaformModalPage implements OnInit {
   constructor(private modalController: ModalController) {}
 
   ngOnInit() {}
+  ngAfterViewInit() {
+    if (this.formValue) this.populateInputFieldsForUpdate(this.formValue);
+  }
   updateCountInFormontrol(v: number, formControlName: string) {
     console.log("count=> " + v);
     this.qazaForm.controls[formControlName].setValue(v);
   }
   populateInputFieldsForUpdate(r) {
-    console.log(r);
-    //not working, probably because timestamp formcontrol is not prresent in the ui.
+    //(was) not working, probably because timestamp formcontrol is not prresent in the ui.
     //also maybe because formControl isn't really targetted from home, but from counter-input
     this.qazaForm.patchValue(r);
   }
   passData() {
-    this.modalController.dismiss(this.qazaForm.getRawValue());
+    const toUpdate = Boolean(this.formValue);
+    const data = { item: this.qazaForm.getRawValue(), toUpdate: toUpdate };
+    this.modalController.dismiss(data);
   }
   dismiss() {
     this.modalController.dismiss();

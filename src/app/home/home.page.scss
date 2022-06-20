@@ -40,7 +40,7 @@ ion-card.card-items {
   top: -60px;
   right: -2px;
   ion-button {
-    font-size: x-small;
+    font-size: xx-small;
   }
 }
 .inputElements ion-item,
@@ -110,4 +110,10 @@ ion-grid ion-col {
     padding: 1rem;
     cursor: pointer;
   }
+}
+.goback-num {
+  width: 70px;
+  margin: 5px auto;
+  background: #e8fcff;
+  border-radius: 10px;
 }

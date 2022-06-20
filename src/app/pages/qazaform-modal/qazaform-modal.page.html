@@ -84,7 +84,12 @@
         ></counter-input>
       </ion-item>
       <ion-button (click)="passData()">
-        <ion-icon slot="start" name="add"></ion-icon> Add New
+        <span *ngIf="!formValue;else updateTemplate">
+          <ion-icon slot="start" name="add"></ion-icon> Add New
+        </span>
+        <ng-template #updateTemplate>
+          <ion-icon slot="start" name="pencil"></ion-icon> Update
+        </ng-template>
       </ion-button>
     </form>
   </div>

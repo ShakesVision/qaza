@@ -81,6 +81,9 @@
             <span *ngIf="logKeysArray"> ({{logKeysArray?.length}}) </span>
           </h2>
           <ion-buttons slot="end">
+            <ion-button (click)="refresh()" fill="clear" color="secondary">
+              <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+            </ion-button>
             <ion-button (click)="deleteAllLogs()" fill="clear" color="danger">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
@@ -113,11 +116,7 @@
                 <ion-button slot="end" fill="none" (click)="exportToJson(r)">
                   <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
                 </ion-button>
-                <ion-button
-                  slot="end"
-                  fill="none"
-                  (click)="populateInputFieldsForUpdate(r)"
-                >
+                <ion-button slot="end" fill="none" (click)="openQazaModal(r,j)">
                   <ion-icon slot="icon-only" name="pencil"></ion-icon>
                 </ion-button>
                 <ion-button
@@ -129,7 +128,13 @@
                 </ion-button>
               </ion-item>
             </div>
+            <ion-label color="medium" class="unique-id"
+              >log{{getUniqueId(app[0].date)}}</ion-label
+            >
             <div class="hangingBtns">
+              <ion-button (click)="exportToJson(app)">
+                <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
+              </ion-button>
               <ion-button
                 color="danger"
                 (click)="deleteConfirm(getLogId(getUniqueId(app[0].date)),app)"
@@ -137,16 +142,6 @@
                 <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
               </ion-button>
             </div>
-            <div class="codenbtn">
-              <!-- d966d91c-664e-47e8-ba65-314d82fe1196 -->
-              <span class="code"> {{app.code}} </span>
-              <ion-button fill="none" (click)="exportToJson(app)">
-                <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
-              </ion-button>
-            </div>
-            <ion-label color="medium" class="unique-id"
-              >log{{getUniqueId(app[0].date)}}</ion-label
-            >
           </ion-card-content>
         </ion-card>
       </div>
@@ -163,6 +158,7 @@
           </ion-label>
         </div>
         <ion-input
+          class="goback-num"
           type="number"
           value="10"
           #goBackX

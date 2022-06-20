@@ -109,6 +109,11 @@ export class HomePage implements AfterViewInit {
       }
     );
   }
+  refresh() {
+    this.loadLogKeysArray();
+    this.getlastXlogs();
+    this.getAll();
+  }
 
   populateMasterForm() {
     console.log("Populating master form");
@@ -144,7 +149,7 @@ export class HomePage implements AfterViewInit {
     );
   }
 
-  updateMaster() {
+  updateMaster(): Promise<any> {
     this.masterData = {
       fajr: {
         total: this.masterForm.controls.fajrTotal.value,
@@ -182,6 +187,7 @@ export class HomePage implements AfterViewInit {
     });
   }
   appendInMasterData(data?: QazaItemModel, operator: string = "+") {
+    console.log(";;;;;;;", data);
     console.warn(data, operator);
     let operators = {
       "+": (a, b) => a + b,
@@ -251,15 +257,15 @@ export class HomePage implements AfterViewInit {
       )
     );
     this.masterData = this.masterForm.getRawValue();
-    this.updateMaster();
+    return this.updateMaster();
   }
   getLogId = (id) => "log" + id;
   updateMultipleLogs(data: QazaItemModel[]) {
-    console.log(data);
     const id = this.getLogId(this.getUniqueId(data[0].date));
     this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
+        console.log("runnnnn", id);
         old.push(data);
         this.storage.set(id, old).then((_) => {
           console.log("log updated successfully", _);
@@ -267,35 +273,40 @@ export class HomePage implements AfterViewInit {
           this.getlastXlogs(this.goBackNum);
         });
       } else {
-        this.storage.set(id, [data]).then((_) => {
-          console.log("log set successfully", _);
-          // this.appendInMasterData(data);
+        console.log("newwww", id);
+        if (!(data instanceof Array)) {
+          data = [data];
+        }
+        this.storage.set(id, data).then((d) => {
+          console.log("log set successfully", d);
+          d.forEach(async (r) => await this.appendInMasterData(r));
           this.getlastXlogs(this.goBackNum, new Date(), true);
           this.setLogKeysArray(id);
         });
       }
     });
   }
-  updateLog(data: QazaItemModel): Promise<any> {
-    console.log(data);
+  updateLog(
+    data: QazaItemModel,
+    toUpdate: boolean = false,
+    index?: number
+  ): Promise<any> {
+    console.log(data, index);
     const id = this.getLogId(this.getUniqueId(data.date));
-    // console.log(id, this.qazaForm.getRawValue());
-    // // data.timestamp = new Date();
-    // this.qazaForm.controls.timestamp.setValue(new Date());
-    // let data: any = this.qazaForm.getRawValue();
     return this.storage.get(id).then((old: any) => {
       console.log(old);
       if (old) {
-        old.push(data);
-        this.storage.set(id, old).then((_) => {
+        if (toUpdate) old[index] = data;
+        else old.push(data);
+        this.storage.set(id, old).then(async (_) => {
           console.log("log updated successfully", _);
-          this.appendInMasterData(data);
+          await this.appendInMasterData(data);
           this.getlastXlogs(this.goBackNum);
         });
       } else {
-        this.storage.set(id, [data]).then((_) => {
+        this.storage.set(id, [data]).then(async (_) => {
           console.log("log set successfully", _);
-          this.appendInMasterData(data);
+          await this.appendInMasterData(data);
           this.getlastXlogs(this.goBackNum, new Date(), true);
           this.setLogKeysArray(id);
         });
@@ -311,8 +322,8 @@ export class HomePage implements AfterViewInit {
   setLogKeysArray(id: string) {
     this.storage.get(DatabasesEnum.LogKeys).then((logKeysArr: string[]) => {
       console.log("adding logkeys. before: ", logKeysArr);
-      this.logKeysArray = logKeysArr;
       if (!logKeysArr) this.logKeysArray = [];
+      this.logKeysArray = logKeysArr;
       this.logKeysArray.push(id);
       this.logKeysArray = Array.from(new Set(this.logKeysArray));
       this.storage.set(DatabasesEnum.LogKeys, this.logKeysArray).then((_) => {
@@ -356,11 +367,11 @@ export class HomePage implements AfterViewInit {
   async importLogs(data: QazaItemModel[][]) {
     console.log(data);
     for (let i = 0; i < data.length; i++) {
-      // await this.updateMultipleLogs(data[i]);
-      for (let j = 0; j < data[i].length; j++) {
-        console.log(data[i][j]);
-        await this.updateLog(data[i][j]);
-      }
+      await this.updateMultipleLogs(data[i]);
+      // for (let j = 0; j < data[i].length; j++) {
+      //   console.log(data[i][j]);
+      //   await this.updateLog(data[i][j]);
+      // }
     }
   }
   exportAllLogs() {
@@ -520,7 +531,7 @@ export class HomePage implements AfterViewInit {
   }
   doRefresh(event) {
     setTimeout(() => {
-      this.getAll();
+      this.refresh();
       console.log("Refreshed.");
       event.target.complete();
     }, 1000);
@@ -786,17 +797,21 @@ export class HomePage implements AfterViewInit {
     this.qazaForm.controls.date.setValue(new Date().toISOString());
   }
 
-  async openQazaModal() {
+  async openQazaModal(formValue?, index?) {
     // const formValue = this.qazaForm.getRawValue();
-    // console.log(formValue);
     const m = await this.modalController.create({
       component: QazaformModalPage,
-      // componentProps: { formValue },
+      componentProps: { formValue },
       swipeToClose: true,
       cssClass: "qaza-modal",
     });
     await m.present();
     const { data } = await m.onDidDismiss();
-    if (data) this.updateLog(data);
+    if (data) {
+      console.log(index, data.toUpdate);
+      if (data.toUpdate) {
+        this.updateLog(data.item, data.toUpdate, index);
+      } else this.updateLog(data.item);
+    }
   }
 }
