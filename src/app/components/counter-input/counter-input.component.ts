@@ -27,6 +27,7 @@ export class CounterInputComponent implements OnInit {
   updateCounter(v: number) {
     let value = parseInt(this.countInput.nativeElement.value);
     value += v;
+    this.control.markAsDirty();
     this.emitCountValue(value);
   }
   inputChanged(e) {

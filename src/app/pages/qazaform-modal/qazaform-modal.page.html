@@ -75,7 +75,7 @@
           ></counter-input>
         </div>
       </div>
-      <ion-item>
+      <ion-item style="line-height: 3em">
         <ion-label>Fast <span class="arabic">صوم</span></ion-label>
         <counter-input
           slot="end"
@@ -83,15 +83,22 @@
           [control]="qazaForm.controls.fast"
         ></counter-input>
       </ion-item>
-      <ion-button (click)="passData()">
-        <!-- [disabled]="!qazaForm.dirty && formValue" -->
-        <span *ngIf="!formValue;else updateTemplate">
-          <ion-icon slot="start" name="add"></ion-icon> Add New
-        </span>
-        <ng-template #updateTemplate>
-          <ion-icon slot="start" name="pencil"></ion-icon> Update
-        </ng-template>
-      </ion-button>
     </form>
   </div>
 </ion-content>
+<ion-footer class="ion-no-border">
+  <div class="ion-text-center" style="margin-bottom: 10px">
+    <ion-button
+      (click)="passData()"
+      size="large"
+      [disabled]="!qazaForm.dirty && formValue"
+    >
+      <span *ngIf="!formValue;else updateTemplate">
+        <ion-icon slot="start" name="add"></ion-icon> Add New
+      </span>
+      <ng-template #updateTemplate>
+        <ion-icon slot="start" name="pencil"></ion-icon> Update
+      </ng-template>
+    </ion-button>
+  </div>
+</ion-footer>

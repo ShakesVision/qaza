@@ -294,6 +294,7 @@ export class HomePage implements AfterViewInit {
   }
   getLogId = (id) => "log" + id;
   updateMultipleLogs(data: QazaItemModel[]) {
+    console.log(data);
     const id = this.getLogId(this.getUniqueId(data[0].date));
     this.storage.get(id).then((old: any) => {
       console.log(old);
@@ -314,6 +315,7 @@ export class HomePage implements AfterViewInit {
           console.log("log set successfully", d);
           d.forEach(async (r) => await this.appendInMasterData(r));
           this.refresh();
+          this.setLogKeysArray(id);
         });
       }
     });
@@ -406,6 +408,9 @@ export class HomePage implements AfterViewInit {
   }
   async importLogs(data: QazaItemModel[][]) {
     console.log(data);
+    if (Array.isArray(data)) {
+      if (!Array.isArray(data[0])) data = <any>[data];
+    }
     for (let i = 0; i < data.length; i++) {
       await this.updateMultipleLogs(data[i]);
       // for (let j = 0; j < data[i].length; j++) {
