@@ -78,13 +78,19 @@
         <ion-item lines="none" class="ion-no-margin">
           <h2 style="color: var(--ion-color-primary)">
             Daily Logs
-            <span *ngIf="logKeysArray"> ({{logKeysArray?.length}}) </span>
+            <span *ngIf="logKeysArray" style="font-size: smaller">
+              ({{logKeysArray?.length}})
+            </span>
           </h2>
           <ion-buttons slot="end">
             <ion-button (click)="refresh()" fill="clear" color="secondary">
               <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
             </ion-button>
-            <ion-button (click)="deleteAllLogs()" fill="clear" color="danger">
+            <ion-button
+              (click)="deleteConfirm(null,null,'Do you want to delete all data?')"
+              fill="clear"
+              color="danger"
+            >
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-button>
             <ion-button (click)="exportAllLogs()" fill="clear" color="primary">
@@ -258,6 +264,19 @@
                   {{masterData.isha.total-masterData.isha.completed}}
                 </div>
               </ion-col>
+              <ion-col>
+                <div class="col-label">Witr</div>
+                <div class="stats-wrap">
+                  <span class="col-label-completed"
+                    >{{masterData.witr.completed}}</span
+                  >
+                  /
+                  <span class="col-label-total">{{masterData.witr.total}}</span>
+                </div>
+                <div class="col-label-remaining">
+                  {{masterData.witr.total-masterData.witr.completed}}
+                </div>
+              </ion-col>
             </ion-row>
           </ion-grid>
         </ion-card-content> </ion-card
@@ -268,7 +287,14 @@
         </ion-card-header>
         <ion-card-content>
           <div class="chart-wrapper">
-            <google-chart [data]="pieChart"></google-chart>
+            <google-chart [data]="barChart"></google-chart>
+          </div>
+        </ion-card-content>
+      </ion-card>
+      <ion-card>
+        <ion-card-content>
+          <div class="chart-wrapper">
+            <google-chart [data]="fastChart"></google-chart>
           </div>
         </ion-card-content>
       </ion-card>
@@ -280,120 +306,136 @@
           <form [formGroup]="masterForm" action="submit">
             <ion-item>
               <ion-label slot="start">Fajr</ion-label>
-              <ion-input
-                type="number"
-                formControlName="fajrTotal"
-                placeholder="Total"
-                slot="end"
-              ></ion-input>
-              <ion-input
-                type="number"
-                formControlName="fajrCompleted"
-                placeholder="Completed"
-                slot="end"
-              ></ion-input>
+              <div class="inputs-wrap">
+                <ion-input
+                  type="number"
+                  formControlName="fajrTotal"
+                  placeholder="Total"
+                  slot="end"
+                ></ion-input>
+                <ion-input
+                  type="number"
+                  formControlName="fajrCompleted"
+                  placeholder="Completed"
+                  slot="end"
+                ></ion-input>
+              </div>
             </ion-item>
             <ion-item>
               <ion-label slot="start">Zuhr</ion-label>
-              <ion-input
-                type="number"
-                formControlName="zuhrTotal"
-                placeholder="Total"
-                slot="end"
-              ></ion-input>
-              <ion-input
-                type="number"
-                formControlName="zuhrCompleted"
-                placeholder="Completed"
-                slot="end"
-              ></ion-input>
+              <div class="inputs-wrap">
+                <ion-input
+                  type="number"
+                  formControlName="zuhrTotal"
+                  placeholder="Total"
+                  slot="end"
+                ></ion-input>
+                <ion-input
+                  type="number"
+                  formControlName="zuhrCompleted"
+                  placeholder="Completed"
+                  slot="end"
+                ></ion-input>
+              </div>
             </ion-item>
             <ion-item>
               <ion-label slot="start">Asr</ion-label>
-              <ion-input
-                type="number"
-                formControlName="asrTotal"
-                placeholder="Total"
-                slot="end"
-              ></ion-input>
-              <ion-input
-                type="number"
-                formControlName="asrCompleted"
-                placeholder="Completed"
-                slot="end"
-              ></ion-input>
+              <div class="inputs-wrap">
+                <ion-input
+                  type="number"
+                  formControlName="asrTotal"
+                  placeholder="Total"
+                  slot="end"
+                ></ion-input>
+                <ion-input
+                  type="number"
+                  formControlName="asrCompleted"
+                  placeholder="Completed"
+                  slot="end"
+                ></ion-input>
+              </div>
             </ion-item>
             <ion-item>
               <ion-label slot="start">Maghrib</ion-label>
-              <ion-input
-                type="number"
-                formControlName="maghribTotal"
-                placeholder="Total"
-                slot="end"
-              ></ion-input>
-              <ion-input
-                type="number"
-                formControlName="maghribCompleted"
-                placeholder="Completed"
-                slot="end"
-              ></ion-input>
+              <div class="inputs-wrap">
+                <ion-input
+                  type="number"
+                  formControlName="maghribTotal"
+                  placeholder="Total"
+                  slot="end"
+                ></ion-input>
+                <ion-input
+                  type="number"
+                  formControlName="maghribCompleted"
+                  placeholder="Completed"
+                  slot="end"
+                ></ion-input>
+              </div>
             </ion-item>
             <ion-item>
               <ion-label slot="start">Isha</ion-label>
-              <ion-input
-                type="number"
-                formControlName="ishaTotal"
-                placeholder="Total"
-                slot="end"
-              ></ion-input>
-              <ion-input
-                type="number"
-                formControlName="ishaCompleted"
-                placeholder="Completed"
-                slot="end"
-              ></ion-input>
+              <div class="inputs-wrap">
+                <ion-input
+                  type="number"
+                  formControlName="ishaTotal"
+                  placeholder="Total"
+                  slot="end"
+                ></ion-input>
+                <ion-input
+                  type="number"
+                  formControlName="ishaCompleted"
+                  placeholder="Completed"
+                  slot="end"
+                ></ion-input>
+              </div>
             </ion-item>
             <ion-item>
               <ion-label slot="start">Witr</ion-label>
-              <ion-input
-                type="number"
-                formControlName="witrTotal"
-                placeholder="Total"
-                slot="end"
-              ></ion-input>
-              <ion-input
-                type="number"
-                formControlName="witrCompleted"
-                placeholder="Completed"
-                slot="end"
-              ></ion-input>
+              <div class="inputs-wrap">
+                <ion-input
+                  type="number"
+                  formControlName="witrTotal"
+                  placeholder="Total"
+                  slot="end"
+                ></ion-input>
+                <ion-input
+                  type="number"
+                  formControlName="witrCompleted"
+                  placeholder="Completed"
+                  slot="end"
+                ></ion-input>
+              </div>
             </ion-item>
             <ion-item>
               <ion-label slot="start">Fast</ion-label>
-              <ion-input
-                type="number"
-                formControlName="fastTotal"
-                placeholder="Total"
-                slot="end"
-              ></ion-input>
-              <ion-input
-                type="number"
-                formControlName="fastCompleted"
-                placeholder="Completed"
-                slot="end"
-              ></ion-input>
+              <div class="inputs-wrap">
+                <ion-input
+                  type="number"
+                  formControlName="fastTotal"
+                  placeholder="Total"
+                  slot="end"
+                ></ion-input>
+                <ion-input
+                  type="number"
+                  formControlName="fastCompleted"
+                  placeholder="Completed"
+                  slot="end"
+                ></ion-input>
+              </div>
             </ion-item>
           </form>
-          <ion-button (click)="updateMaster()">
-            <ion-icon slot="start" name="checkmark"></ion-icon>
-            Update Master Data
-          </ion-button>
-          <ion-button (click)="exportToJson(masterData)">
-            <ion-icon slot="start" name="copy-outline"></ion-icon>
-            Copy as JSON
-          </ion-button>
         </div>
       </ion-card>
+      <div class="ion-text-center">
+        <ion-button (click)="updateMaster()">
+          <ion-icon slot="start" name="checkmark"></ion-icon>
+          Update Master Data
+        </ion-button>
+        <ion-button (click)="exportToJson(masterData)">
+          <ion-icon slot="start" name="copy-outline"></ion-icon>
+          Copy as JSON
+        </ion-button>
+      </div>
     </div>
   </div>
 </ion-content>

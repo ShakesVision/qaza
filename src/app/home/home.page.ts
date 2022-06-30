@@ -22,7 +22,7 @@ import {
   QazaItemModel,
 } from "../models/db-model";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GoogleChartInterface } from "ng2-google-charts";
+import { GoogleChartInterface, GoogleChartType } from "ng2-google-charts";
 import { CounterInputComponent } from "../components/counter-input/counter-input.component";
 import { QazaformModalPage } from "../pages/qazaform-modal/qazaform-modal.page";
 
@@ -93,7 +93,8 @@ export class HomePage implements AfterViewInit {
     fastTotal: new FormControl(0),
     fastCompleted: new FormControl(0),
   });
-  public pieChart: GoogleChartInterface;
+  public barChart: GoogleChartInterface;
+  public fastChart: GoogleChartInterface;
 
   ngOnInit() {
     this.plt.ready().then(() => {
@@ -545,7 +546,7 @@ export class HomePage implements AfterViewInit {
         // this.items = entries;
         this.masterData = entries;
         this.populateMasterForm();
-        this.loadSimplePieChart();
+        this.loadCharts();
       } else this.masterDataPresent = false;
     });
   }
@@ -621,7 +622,7 @@ export class HomePage implements AfterViewInit {
       .catch((e) => console.log(e));
   }
   ionViewDidEnter() {
-    this.loadSimplePieChart();
+    this.loadCharts();
 
     this.subscription = this.plt.backButton.subscribe(() => {
       navigator["app"].exitApp();
@@ -640,10 +641,12 @@ export class HomePage implements AfterViewInit {
     });
     toast.present();
   }
-  async deleteConfirm(id, data) {
+  async deleteConfirm(id?, data?, msg?) {
+    if (!msg)
+      msg = `Do you really want to delete the entry for <strong><em>${id}</em></strong> completely?`;
     const alert = await this.alertController.create({
       header: "Confirm!",
-      message: `Do you really want to delete the entry for <strong><em>${id}</em></strong> completely?`,
+      message: msg,
       buttons: [
         {
           text: "Cancel",
@@ -657,7 +660,8 @@ export class HomePage implements AfterViewInit {
           cssClass: "deleteConfirmBtn",
           handler: () => {
             // this.delete(i);
-            this.deleteLog(id, data);
+            if (id) this.deleteLog(id, data);
+            else this.deleteAllLogs();
           },
         },
       ],
@@ -709,9 +713,9 @@ export class HomePage implements AfterViewInit {
       .then(() => {})
       .catch((e) => alert(e));
   }
-  loadSimplePieChart() {
-    this.pieChart = {
-      chartType: "ColumnChart",
+  loadCharts() {
+    this.barChart = {
+      chartType: GoogleChartType.ColumnChart,
       dataTable: [
         ["Prayer", "Completed", "Total"],
         ["Fajr", this.masterData.fajr.completed, this.masterData.fajr.total],
@@ -737,6 +741,18 @@ export class HomePage implements AfterViewInit {
         height: 350,
         width: "100%",
       },
+    };
+    this.fastChart = {
+      chartType: GoogleChartType.PieChart,
+      dataTable: [
+        ["Completed", this.masterData.fast.completed],
+        [
+          "Remaining",
+          this.masterData.fast.total - this.masterData.fast.completed,
+        ],
+      ],
+      firstRowIsData: true,
+      options: { title: "Fast" },
     };
   }
   exportToJson(data) {

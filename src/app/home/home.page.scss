@@ -132,3 +132,23 @@ ion-grid ion-col {
   float: right;
   font-style: italic;
 }
+.masterForm {
+  ion-item {
+    ion-label {
+      width: 100px;
+    }
+    ion-input:nth-child(1) {
+      // color: var(--ion-color-danger);
+      // text-align: left;
+    }
+    ion-input:last-child {
+      color: var(--ion-color-success);
+      // text-align: right;
+    }
+  }
+  .inputs-wrap {
+    display: flex;
+    justify-content: center;
+    text-align: right;
+  }
+}
