@@ -152,3 +152,11 @@ ion-grid ion-col {
     text-align: right;
   }
 }
+
+.row-controls {
+  border-bottom: 1px solid #c1f7ff;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -83,9 +83,6 @@
             </span>
           </h2>
           <ion-buttons slot="end">
-            <ion-button (click)="refresh()" fill="clear" color="secondary">
-              <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
-            </ion-button>
             <ion-button
               (click)="deleteConfirm(null,null,'Do you want to delete all data?')"
               fill="clear"
@@ -114,26 +111,32 @@
               Maghrib:{{r.maghrib}}, Isha:{{r.isha}}, Witr:{{r.witr}},
               Fast:{{r.fast}}
 
-              <ion-item class="row-controls">
-                <ion-icon slot="start" name="time-outline"></ion-icon>
-                <ion-label slot="start" color="medium">
-                  {{r.timestamp ? (r.timestamp| date:'mediumTime') : (r.date |
-                  date:'mediumTime')}}
-                </ion-label>
-                <ion-button slot="end" fill="none" (click)="exportToJson(r)">
+              <div class="row-controls">
+                <span>
+                  <ion-icon slot="start" name="time-outline"></ion-icon>
+                  <ion-label color="medium">
+                    {{r.timestamp ? (r.timestamp| date:'mediumTime') : (r.date |
+                    date:'mediumTime')}}
+                  </ion-label>
+                </span>
+                <ion-button size="small" fill="none" (click)="exportToJson(r)">
                   <ion-icon slot="icon-only" name="copy-outline"></ion-icon>
                 </ion-button>
-                <ion-button slot="end" fill="none" (click)="openQazaModal(r,j)">
+                <ion-button
+                  size="small"
+                  fill="none"
+                  (click)="openQazaModal(r,j)"
+                >
                   <ion-icon slot="icon-only" name="pencil"></ion-icon>
                 </ion-button>
                 <ion-button
-                  slot="end"
+                  size="small"
                   fill="none"
                   (click)="deleteOneRecord(getLogId(getUniqueId(app[0].date)),app,j)"
                 >
                   <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
                 </ion-button>
-              </ion-item>
+              </div>
             </div>
             <ion-label color="medium" class="unique-id"
               >log{{getUniqueId(app[0].date)}}</ion-label
