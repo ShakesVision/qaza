@@ -16,8 +16,7 @@ import { OneSignal } from "@ionic-native/onesignal/ngx";
 import { CounterInputComponent } from "./components/counter-input/counter-input.component";
 
 @NgModule({
-  declarations: [AppComponent, CounterInputComponent],
-  exports: [CounterInputComponent],
+  declarations: [AppComponent],
   entryComponents: [],
   imports: [
     BrowserModule,
