@@ -66,6 +66,7 @@ export class HomePage implements AfterViewInit {
   datesArray: Date[] = [];
   goBackNum: number = 10;
   logKeysArray: string[];
+  isMasterEditable: boolean = false;
   qazaForm = new FormGroup({
     date: new FormControl(""),
     fajr: new FormControl(0),
@@ -109,6 +110,7 @@ export class HomePage implements AfterViewInit {
         this.storage.set("authKey", this.authKey);
       }
     );
+    if (!this.isMasterEditable) this.masterForm.disable();
   }
   refresh() {
     this.loadLogKeysArray();
@@ -378,13 +380,14 @@ export class HomePage implements AfterViewInit {
     const alert = await this.alertController.create({
       cssClass: "en",
       header: "Import!",
-      subHeader: "Paste the text file to import",
+      subHeader: "Paste the json data to import.", //Should be a list of lists (list of Logs containing list of Entries.)
       inputs: [
         {
           name: "data",
           id: "data",
           type: "textarea",
           placeholder: "Text to import...متن برائے درامد",
+          cssClass: "importTextArea",
         },
       ],
       buttons: [
@@ -632,12 +635,13 @@ export class HomePage implements AfterViewInit {
     // this.showInterstitial();
     this.subscription.unsubscribe();
   }
-  async presentToast(msg) {
+  async presentToast(msg, clr = "success") {
     const toast = await this.toastController.create({
       message: msg,
-      color: "success",
+      color: clr,
       duration: 2000,
       keyboardClose: true,
+      position: "middle",
     });
     toast.present();
   }
@@ -874,5 +878,17 @@ export class HomePage implements AfterViewInit {
         this.updateLog(data.item, data.toUpdate, index);
       } else this.updateLog(data.item);
     }
+  }
+  changeMasterEditableToggle(ev) {
+    this.isMasterEditable = !this.isMasterEditable;
+    if (!this.isMasterEditable) this.masterForm.disable();
+    else this.masterForm.enable();
+  }
+  warnIfNotEditable() {
+    if (!this.isMasterEditable)
+      this.presentToast(
+        "Turn the 'Editable' toggle ON before editing.",
+        "warning"
+      );
   }
 }

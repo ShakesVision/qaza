@@ -18,26 +18,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding">
-  <ion-segment
-    color="primary"
-    [(ngModel)]="type"
-    (ionChange)="segmentChanged($event)"
-  >
-    <ion-segment-button value="default" checked>
-      <ion-label>Add</ion-label>
-      <ion-icon name="add"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="new">
-      <ion-label>Track</ion-label>
-      <ion-icon name="pie-chart"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="master">
-      <ion-label>Master</ion-label>
-      <ion-icon name="grid"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
-
+<ion-content [fullscreen]="true">
   <div [ngSwitch]="type">
     <div *ngSwitchCase="'default'">
       <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
@@ -304,7 +285,7 @@
     </div>
 
     <div *ngSwitchCase="'master'">
-      <ion-card>
+      <ion-card (click)="warnIfNotEditable()">
         <div class="masterForm ion-text-center">
           <form [formGroup]="masterForm" action="submit">
             <ion-item>
@@ -430,11 +411,19 @@
         </div>
       </ion-card>
       <div class="ion-text-center">
-        <ion-button (click)="updateMaster()">
+        <ion-item>
+          <ion-label>Editable</ion-label>
+          <ion-toggle
+            [checked]="isMasterEditable"
+            (ionChange)="changeMasterEditableToggle()"
+            slot="end"
+          ></ion-toggle>
+        </ion-item>
+        <ion-button (click)="updateMaster()" [disabled]="!isMasterEditable">
           <ion-icon slot="start" name="checkmark"></ion-icon>
           Update Master Data
         </ion-button>
-        <ion-button (click)="exportToJson(masterData)">
+        <ion-button (click)="exportToJson(masterData)" color="light">
           <ion-icon slot="start" name="copy-outline"></ion-icon>
           Copy as JSON
         </ion-button>
@@ -442,3 +431,23 @@
     </div>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-segment
+    color="primary"
+    [(ngModel)]="type"
+    (ionChange)="segmentChanged($event)"
+  >
+    <ion-segment-button value="default" checked>
+      <ion-label>Add</ion-label>
+      <ion-icon name="add"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="new">
+      <ion-label>Track</ion-label>
+      <ion-icon name="pie-chart"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="master">
+      <ion-label>Master</ion-label>
+      <ion-icon name="grid"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+</ion-footer>
